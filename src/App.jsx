@@ -3,7 +3,8 @@ import { ToastContainer } from "react-toastify";
 import Layout from "@/components/organisms/Layout";
 import Dashboard from "@/components/pages/Dashboard";
 import Contacts from "@/components/pages/Contacts";
-import Companies from "@/components/pages/Companies";
+import Reminders from "@/components/pages/Reminders";
+import FollowUp from "@/components/pages/FollowUp";
 import Deals from "@/components/pages/Deals";
 import Activities from "@/components/pages/Activities";
 import Reports from "@/components/pages/Reports";
@@ -16,7 +17,8 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Dashboard />} />
             <Route path="contacts" element={<Contacts />} />
-            <Route path="companies" element={<Companies />} />
+            <Route path="reminders" element={<Reminders />} />
+            <Route path="follow-up" element={<FollowUp />} />
             <Route path="deals" element={<Deals />} />
             <Route path="activities" element={<Activities />} />
             <Route path="reports" element={<Reports />} />
