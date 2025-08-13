@@ -1,0 +1,98 @@
+[
+  {
+    "Id": 1,
+    "title": "Enterprise Software License",
+    "value": 85000,
+    "stage": "negotiation",
+    "contactId": 1,
+    "companyId": 1,
+    "probability": 75,
+    "expectedCloseDate": "2024-03-15T00:00:00Z",
+    "createdAt": "2024-01-15T10:30:00Z",
+    "updatedAt": "2024-01-25T14:20:00Z"
+  },
+  {
+    "Id": 2,
+    "title": "Custom Development Project",
+    "value": 120000,
+    "stage": "proposal",
+    "contactId": 2,
+    "companyId": 2,
+    "probability": 60,
+    "expectedCloseDate": "2024-04-01T00:00:00Z",
+    "createdAt": "2024-01-16T14:20:00Z",
+    "updatedAt": "2024-01-26T16:15:00Z"
+  },
+  {
+    "Id": 3,
+    "title": "Investment Advisory Services",
+    "value": 250000,
+    "stage": "qualified",
+    "contactId": 3,
+    "companyId": 3,
+    "probability": 40,
+    "expectedCloseDate": "2024-05-30T00:00:00Z",
+    "createdAt": "2024-01-17T09:15:00Z",
+    "updatedAt": "2024-01-27T10:30:00Z"
+  },
+  {
+    "Id": 4,
+    "title": "E-commerce Platform Setup",
+    "value": 45000,
+    "stage": "lead",
+    "contactId": 4,
+    "companyId": 4,
+    "probability": 25,
+    "expectedCloseDate": "2024-04-15T00:00:00Z",
+    "createdAt": "2024-01-18T16:45:00Z",
+    "updatedAt": "2024-01-28T12:00:00Z"
+  },
+  {
+    "Id": 5,
+    "title": "Strategic Planning Consulting",
+    "value": 75000,
+    "stage": "won",
+    "contactId": 5,
+    "companyId": 5,
+    "probability": 100,
+    "expectedCloseDate": "2024-02-28T00:00:00Z",
+    "createdAt": "2024-01-19T11:30:00Z",
+    "updatedAt": "2024-01-29T15:45:00Z"
+  },
+  {
+    "Id": 6,
+    "title": "Digital Marketing Campaign",
+    "value": 25000,
+    "stage": "lost",
+    "contactId": 6,
+    "companyId": 1,
+    "probability": 0,
+    "expectedCloseDate": "2024-03-01T00:00:00Z",
+    "createdAt": "2024-01-20T13:20:00Z",
+    "updatedAt": "2024-01-30T09:30:00Z"
+  },
+  {
+    "Id": 7,
+    "title": "Cloud Infrastructure Migration",
+    "value": 95000,
+    "stage": "negotiation",
+    "contactId": 7,
+    "companyId": 2,
+    "probability": 80,
+    "expectedCloseDate": "2024-03-20T00:00:00Z",
+    "createdAt": "2024-01-21T15:10:00Z",
+    "updatedAt": "2024-01-31T11:20:00Z"
+  },
+  {
+    "Id": 8,
+    "title": "Financial System Upgrade",
+    "value": 180000,
+    "stage": "proposal",
+    "contactId": 8,
+    "companyId": 3,
+    "probability": 65,
+    "expectedCloseDate": "2024-05-15T00:00:00Z",
+    "createdAt": "2024-01-22T12:00:00Z",
+    "updatedAt": "2024-02-01T14:30:00Z"
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "Id": 1,
+    "name": "TechCorp Solutions",
+    "industry": "Technology",
+    "website": "https://techcorp.com",
+    "employeeCount": "100-500",
+    "createdAt": "2024-01-10T08:00:00Z"
+  },
+  {
+    "Id": 2,
+    "name": "InnovateSoft",
+    "industry": "Software Development",
+    "website": "https://innovatesoft.com",
+    "employeeCount": "50-100",
+    "createdAt": "2024-01-11T10:30:00Z"
+  },
+  {
+    "Id": 3,
+    "name": "Global Ventures Inc",
+    "industry": "Investment",
+    "website": "https://globalventures.com",
+    "employeeCount": "500+",
+    "createdAt": "2024-01-12T14:15:00Z"
+  },
+  {
+    "Id": 4,
+    "name": "NextGen Startup",
+    "industry": "E-commerce",
+    "website": "https://nextgenstartup.com",
+    "employeeCount": "10-50",
+    "createdAt": "2024-01-13T16:20:00Z"
+  },
+  {
+    "Id": 5,
+    "name": "Strategic Consulting Group",
+    "industry": "Consulting",
+    "website": "https://strategicconsulting.com",
+    "employeeCount": "100-500",
+    "createdAt": "2024-01-14T09:45:00Z"
+  },
+  {
+    "Id": 6,
+    "name": "Digital Marketing Pro",
+    "industry": "Marketing",
+    "website": "https://digitalmarketingpro.com",
+    "employeeCount": "10-50",
+    "createdAt": "2024-01-15T11:30:00Z"
+  }
+]

@@ -1,0 +1,90 @@
+[
+  {
+    "Id": 1,
+    "type": "call",
+    "title": "Follow-up call with Sarah Johnson",
+    "description": "Discuss contract terms and pricing for enterprise license",
+    "dueDate": "2024-02-15T14:00:00Z",
+    "status": "pending",
+    "relatedToId": 1,
+    "relatedToType": "deal",
+    "createdAt": "2024-02-10T09:30:00Z"
+  },
+  {
+    "Id": 2,
+    "type": "email",
+    "title": "Send proposal to InnovateSoft",
+    "description": "Send detailed project proposal with timeline and deliverables",
+    "dueDate": "2024-02-12T10:00:00Z",
+    "status": "completed",
+    "relatedToId": 2,
+    "relatedToType": "deal",
+    "createdAt": "2024-02-08T11:15:00Z"
+  },
+  {
+    "Id": 3,
+    "type": "meeting",
+    "title": "Discovery meeting with Global Ventures",
+    "description": "Understand their investment advisory needs and requirements",
+    "dueDate": "2024-02-20T15:30:00Z",
+    "status": "pending",
+    "relatedToId": 3,
+    "relatedToType": "deal",
+    "createdAt": "2024-02-09T13:45:00Z"
+  },
+  {
+    "Id": 4,
+    "type": "task",
+    "title": "Prepare demo for NextGen Startup",
+    "description": "Create customized demo showcasing e-commerce features",
+    "dueDate": "2024-02-18T12:00:00Z",
+    "status": "pending",
+    "relatedToId": 4,
+    "relatedToType": "deal",
+    "createdAt": "2024-02-11T16:20:00Z"
+  },
+  {
+    "Id": 5,
+    "type": "call",
+    "title": "Contract review call",
+    "description": "Review final contract terms with Strategic Consulting Group",
+    "dueDate": "2024-02-08T10:30:00Z",
+    "status": "overdue",
+    "relatedToId": 5,
+    "relatedToType": "deal",
+    "createdAt": "2024-02-05T14:00:00Z"
+  },
+  {
+    "Id": 6,
+    "type": "email",
+    "title": "Thank you note to client",
+    "description": "Send thank you email after successful project completion",
+    "dueDate": "2024-02-14T09:00:00Z",
+    "status": "completed",
+    "relatedToId": 5,
+    "relatedToType": "deal",
+    "createdAt": "2024-02-12T17:30:00Z"
+  },
+  {
+    "Id": 7,
+    "type": "meeting",
+    "title": "Technical requirements review",
+    "description": "Review technical specifications for cloud migration project",
+    "dueDate": "2024-02-16T14:00:00Z",
+    "status": "pending",
+    "relatedToId": 7,
+    "relatedToType": "deal",
+    "createdAt": "2024-02-13T10:15:00Z"
+  },
+  {
+    "Id": 8,
+    "type": "task",
+    "title": "Update CRM with latest contact info",
+    "description": "Update contact information for all Global Ventures team members",
+    "dueDate": "2024-02-17T11:00:00Z",
+    "status": "pending",
+    "relatedToId": 8,
+    "relatedToType": "contact",
+    "createdAt": "2024-02-14T15:45:00Z"
+  }
+]
