@@ -313,22 +313,24 @@ const [contactsData, companiesData, dealsData, activitiesData, hotLeadsData, col
             </h2>
             <span className="text-sm text-gray-500">{hotLeads.length} contacts</span>
           </div>
-          <div className="space-y-3 max-h-96 overflow-y-auto">
-            {hotLeads.slice(0, 8).map((lead) => (
+<div className="space-y-3 max-h-96 overflow-y-auto">
+            {hotLeads.slice(0, 8).map((lead) => {
+              const [firstName, lastName] = (lead.name || '').split(' ');
+              return (
               <div 
                 key={lead.Id} 
                 className="flex items-center justify-between p-3 rounded-lg hover:bg-red-50 transition-colors duration-200 cursor-pointer border border-transparent hover:border-red-200"
-                onClick={() => handleContactClick(lead)}
+                onClick={() => handleContactClick({...lead, firstName, lastName})}
               >
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center">
                     <span className="text-white font-semibold text-sm">
-                      {lead.firstName?.[0]?.toUpperCase()}{lead.lastName?.[0]?.toUpperCase()}
+                      {firstName?.[0]?.toUpperCase()}{lastName?.[0]?.toUpperCase()}
                     </span>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-900">
-                      {lead.firstName} {lead.lastName}
+                      {lead.name}
                     </p>
                     <p className="text-xs text-gray-500">{lead.company}</p>
                   </div>
@@ -338,7 +340,8 @@ const [contactsData, companiesData, dealsData, activitiesData, hotLeadsData, col
                   <ApperIcon name="ChevronRight" className="w-4 h-4 text-gray-400" />
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </Card>
 
@@ -351,22 +354,24 @@ const [contactsData, companiesData, dealsData, activitiesData, hotLeadsData, col
             </h2>
             <span className="text-sm text-gray-500">{coldLeads.length} contacts</span>
           </div>
-          <div className="space-y-3 max-h-96 overflow-y-auto">
-            {coldLeads.slice(0, 8).map((lead) => (
+<div className="space-y-3 max-h-96 overflow-y-auto">
+            {coldLeads.slice(0, 8).map((lead) => {
+              const [firstName, lastName] = (lead.name || '').split(' ');
+              return (
               <div 
                 key={lead.Id} 
                 className="flex items-center justify-between p-3 rounded-lg hover:bg-blue-50 transition-colors duration-200 cursor-pointer border border-transparent hover:border-blue-200"
-                onClick={() => handleContactClick(lead)}
+                onClick={() => handleContactClick({...lead, firstName, lastName})}
               >
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center">
                     <span className="text-white font-semibold text-sm">
-                      {lead.firstName?.[0]?.toUpperCase()}{lead.lastName?.[0]?.toUpperCase()}
+                      {firstName?.[0]?.toUpperCase()}{lastName?.[0]?.toUpperCase()}
                     </span>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-900">
-                      {lead.firstName} {lead.lastName}
+                      {lead.name}
                     </p>
                     <p className="text-xs text-gray-500">{lead.company}</p>
                   </div>
@@ -376,7 +381,8 @@ const [contactsData, companiesData, dealsData, activitiesData, hotLeadsData, col
                   <ApperIcon name="ChevronRight" className="w-4 h-4 text-gray-400" />
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </Card>
       </div>
