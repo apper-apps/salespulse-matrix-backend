@@ -15,7 +15,6 @@ const navigationItems = [
     { name: "Activities", href: "/activities", icon: "CheckSquare" },
     { name: "Reports", href: "/reports", icon: "FileBarChart" }
   ];
-
   const NavItem = ({ item, mobile = false }) => (
     <NavLink
       to={item.href}
@@ -59,11 +58,25 @@ const navigationItems = [
                 SalesPulse
               </span>
             </div>
-          </div>
+</div>
           <nav className="flex-1 px-4 pb-4 space-y-2">
             {navigationItems.map((item) => (
               <NavItem key={item.name} item={item} />
             ))}
+            {/* Logout Button */}
+            <button
+              onClick={() => {
+                const { ApperUI } = window.ApperSDK;
+                ApperUI.logout();
+              }}
+              className="w-full flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 group text-gray-700 hover:bg-red-50 hover:text-red-700 mt-4"
+            >
+              <ApperIcon
+                name="LogOut"
+                className="w-5 h-5 mr-3 transition-colors duration-200 text-gray-500 group-hover:text-red-700"
+              />
+              Logout
+            </button>
           </nav>
         </div>
       </div>
@@ -101,10 +114,25 @@ const navigationItems = [
                   </span>
                 </div>
               </div>
-              <nav className="flex-1 px-4 pb-4 space-y-2">
+<nav className="flex-1 px-4 pb-4 space-y-2">
                 {navigationItems.map((item) => (
                   <NavItem key={item.name} item={item} mobile />
                 ))}
+                {/* Mobile Logout Button */}
+                <button
+                  onClick={() => {
+                    const { ApperUI } = window.ApperSDK;
+                    ApperUI.logout();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="w-full flex items-center px-6 py-4 rounded-lg text-base font-medium transition-all duration-200 group text-gray-700 hover:bg-red-50 hover:text-red-700 mt-4"
+                >
+                  <ApperIcon
+                    name="LogOut"
+                    className="w-5 h-5 mr-3 transition-colors duration-200 text-gray-500 group-hover:text-red-700"
+                  />
+                  Logout
+                </button>
               </nav>
             </div>
           </div>
