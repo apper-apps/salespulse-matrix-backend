@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { contactsService } from "@/services/api/contactsService";
-import { companiesService } from "@/services/api/companiesService";
+import { reminderService } from "@/services/api/reminderService";
+import { followUpService } from "@/services/api/followUpService";
 import { dealsService } from "@/services/api/dealsService";
 import { activitiesService } from "@/services/api/activitiesService";
 import { leadService } from "@/services/api/leadService";
@@ -15,12 +16,12 @@ import Error from "@/components/ui/Error";
 import Button from "@/components/atoms/Button";
 import Card from "@/components/atoms/Card";
 import Contacts from "@/components/pages/Contacts";
-import Companies from "@/components/pages/Companies";
 import Deals from "@/components/pages/Deals";
 import Activities from "@/components/pages/Activities";
 import contactsData from "@/services/mockData/contacts.json";
 import coldLeadsData from "@/services/mockData/coldLeads.json";
-import companiesData from "@/services/mockData/companies.json";
+import remindersData from "@/services/mockData/reminders.json";
+import followUpsData from "@/services/mockData/followUps.json";
 import dealsData from "@/services/mockData/deals.json";
 import activitiesData from "@/services/mockData/activities.json";
 import hotLeadsData from "@/services/mockData/hotLeads.json";
@@ -28,7 +29,8 @@ import hotLeadsData from "@/services/mockData/hotLeads.json";
 const Dashboard = () => {
   const navigate = useNavigate();
 const [contacts, setContacts] = useState([]);
-  const [companies, setCompanies] = useState([]);
+const [reminders, setReminders] = useState([]);
+  const [followUps, setFollowUps] = useState([]);
   const [deals, setDeals] = useState([]);
   const [activities, setActivities] = useState([]);
   const [hotLeads, setHotLeads] = useState([]);
@@ -43,17 +45,19 @@ const [contacts, setContacts] = useState([]);
       setLoading(true);
       setError("");
       
-const [contactsData, companiesData, dealsData, activitiesData, hotLeadsData, coldLeadsData] = await Promise.all([
+const [contactsData, dealsData, activitiesData, hotLeadsData, coldLeadsData, remindersData, followUpsData] = await Promise.all([
         contactsService.getAll(),
-        companiesService.getAll(),
         dealsService.getAll(),
         activitiesService.getAll(),
         leadService.getHotLeads(),
-        leadService.getColdLeads()
+        leadService.getColdLeads(),
+        reminderService.getAll(),
+        followUpService.getAll()
       ]);
       
       setContacts(contactsData);
-      setCompanies(companiesData);
+setReminders(remindersData);
+      setFollowUps(followUpsData);
       setDeals(dealsData);
       setActivities(activitiesData);
       setHotLeads(hotLeadsData);
@@ -100,11 +104,11 @@ const [contactsData, companiesData, dealsData, activitiesData, hotLeadsData, col
       gradient: "bg-gradient-to-r from-green-500 to-green-600"
     },
     {
-      title: "Add Company",
-      description: "Register a new company",
-      icon: "Building2",
-      action: () => navigate("/companies"),
-      gradient: "bg-gradient-to-r from-purple-500 to-purple-600"
+title: "Set Reminder",
+      description: "Create a new reminder or task",
+      icon: "Bell",
+      action: () => navigate("/reminders"),
+      gradient: "bg-gradient-to-r from-orange-500 to-orange-600"
     },
     {
       title: "Log Activity",
@@ -272,12 +276,19 @@ const [contactsData, companiesData, dealsData, activitiesData, hotLeadsData, col
                 </div>
                 <span className="font-semibold text-gray-900">{contacts.length}</span>
               </div>
+<div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <ApperIcon name="Bell" className="w-5 h-5 text-orange-500" />
+                  <span className="text-gray-700">Active Reminders</span>
+                </div>
+                <span className="font-semibold text-gray-900">{reminders.filter(r => r.status === 'pending').length}</span>
+              </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <ApperIcon name="Building2" className="w-5 h-5 text-green-500" />
-                  <span className="text-gray-700">Companies</span>
+                  <ApperIcon name="Clock" className="w-5 h-5 text-indigo-500" />
+                  <span className="text-gray-700">Follow-ups</span>
                 </div>
-                <span className="font-semibold text-gray-900">{companies.length}</span>
+                <span className="font-semibold text-gray-900">{followUps.filter(f => f.status === 'pending').length}</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
@@ -385,8 +396,124 @@ const [contactsData, companiesData, dealsData, activitiesData, hotLeadsData, col
             })}
           </div>
         </Card>
-      </div>
+</div>
 
+      {/* Reminders and Follow-ups Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+        {/* Reminders */}
+        <Card className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+              <ApperIcon name="Bell" className="w-5 h-5 text-orange-500" />
+              Upcoming Reminders
+            </h2>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-500">{reminders.filter(r => r.status === 'pending').length} pending</span>
+              <Button variant="outline" size="small" onClick={() => navigate("/reminders")}>
+                <ApperIcon name="Calendar" className="w-4 h-4 mr-2" />
+                Calendar
+              </Button>
+            </div>
+          </div>
+          <div className="space-y-3 max-h-96 overflow-y-auto">
+            {reminders.filter(r => r.status === 'pending').slice(0, 5).map((reminder) => (
+              <div 
+                key={reminder.Id} 
+                className="flex items-center justify-between p-3 rounded-lg hover:bg-orange-50 transition-colors duration-200 cursor-pointer border border-transparent hover:border-orange-200"
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
+                    <ApperIcon 
+                      name={reminder.type === 'call' ? 'Phone' : reminder.type === 'email' ? 'Mail' : reminder.type === 'meeting' ? 'Calendar' : 'CheckSquare'} 
+                      className="w-5 h-5 text-white" 
+                    />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">{reminder.title}</p>
+                    <p className="text-xs text-gray-500">{reminder.contactName}</p>
+                    <p className="text-xs text-gray-400">
+                      {format(new Date(reminder.dueDate), "MMM dd, h:mm a")}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    reminder.priority === 'high' ? 'bg-red-100 text-red-700' :
+                    reminder.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                    'bg-green-100 text-green-700'
+                  }`}>
+                    {reminder.priority}
+                  </div>
+                  <ApperIcon name="ChevronRight" className="w-4 h-4 text-gray-400" />
+                </div>
+              </div>
+            ))}
+            {reminders.filter(r => r.status === 'pending').length === 0 && (
+              <div className="text-center py-8 text-gray-500">
+                <ApperIcon name="Bell" className="w-12 h-12 mx-auto text-gray-300 mb-2" />
+                <p>No pending reminders</p>
+              </div>
+            )}
+          </div>
+        </Card>
+
+        {/* Follow-ups */}
+        <Card className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+              <ApperIcon name="Clock" className="w-5 h-5 text-indigo-500" />
+              Scheduled Follow-ups
+            </h2>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-500">{followUps.filter(f => f.status === 'pending').length} pending</span>
+              <Button variant="outline" size="small" onClick={() => navigate("/follow-ups")}>
+                <ApperIcon name="Calendar" className="w-4 h-4 mr-2" />
+                Schedule
+              </Button>
+            </div>
+          </div>
+          <div className="space-y-3 max-h-96 overflow-y-auto">
+            {followUps.filter(f => f.status === 'pending').slice(0, 5).map((followUp) => (
+              <div 
+                key={followUp.Id} 
+                className="flex items-center justify-between p-3 rounded-lg hover:bg-indigo-50 transition-colors duration-200 cursor-pointer border border-transparent hover:border-indigo-200"
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center">
+                    <ApperIcon 
+                      name={followUp.method === 'call' ? 'Phone' : followUp.method === 'email' ? 'Mail' : 'Calendar'} 
+                      className="w-5 h-5 text-white" 
+                    />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">{followUp.title}</p>
+                    <p className="text-xs text-gray-500">{followUp.contactName}</p>
+                    <p className="text-xs text-gray-400">
+                      {format(new Date(followUp.scheduledDate), "MMM dd, h:mm a")}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    followUp.priority === 'high' ? 'bg-red-100 text-red-700' :
+                    followUp.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                    'bg-green-100 text-green-700'
+                  }`}>
+                    {followUp.priority}
+                  </div>
+                  <ApperIcon name="ChevronRight" className="w-4 h-4 text-gray-400" />
+                </div>
+              </div>
+            ))}
+            {followUps.filter(f => f.status === 'pending').length === 0 && (
+              <div className="text-center py-8 text-gray-500">
+                <ApperIcon name="Clock" className="w-12 h-12 mx-auto text-gray-300 mb-2" />
+                <p>No scheduled follow-ups</p>
+              </div>
+            )}
+          </div>
+        </Card>
+      </div>
       {/* Contact Detail Modal */}
       {showContactModal && selectedContact && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">

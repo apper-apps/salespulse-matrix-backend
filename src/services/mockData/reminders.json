@@ -1,0 +1,67 @@
+[
+  {
+    "Id": 1,
+    "title": "Call John Smith",
+    "description": "Follow up on the product demo meeting",
+    "dueDate": "2024-01-15T10:00:00Z",
+    "priority": "high",
+    "status": "pending",
+    "contactId": 1,
+    "contactName": "John Smith",
+    "type": "call",
+    "createdAt": "2024-01-10T08:00:00Z",
+    "updatedAt": "2024-01-10T08:00:00Z"
+  },
+  {
+    "Id": 2,
+    "title": "Send proposal to ABC Corp",
+    "description": "Send updated pricing proposal to ABC Corp",
+    "dueDate": "2024-01-16T14:00:00Z",
+    "priority": "medium",
+    "status": "pending",
+    "contactId": 3,
+    "contactName": "Sarah Johnson",
+    "type": "email",
+    "createdAt": "2024-01-11T09:00:00Z",
+    "updatedAt": "2024-01-11T09:00:00Z"
+  },
+  {
+    "Id": 3,
+    "title": "Schedule meeting with Mike Wilson",
+    "description": "Discuss new feature requirements",
+    "dueDate": "2024-01-17T11:00:00Z",
+    "priority": "low",
+    "status": "completed",
+    "contactId": 2,
+    "contactName": "Mike Wilson",
+    "type": "meeting",
+    "createdAt": "2024-01-09T15:00:00Z",
+    "updatedAt": "2024-01-14T10:00:00Z"
+  },
+  {
+    "Id": 4,
+    "title": "Review contract with XYZ Ltd",
+    "description": "Review and finalize contract terms",
+    "dueDate": "2024-01-18T16:00:00Z",
+    "priority": "high",
+    "status": "pending",
+    "contactId": 4,
+    "contactName": "Emma Davis",
+    "type": "task",
+    "createdAt": "2024-01-12T11:00:00Z",
+    "updatedAt": "2024-01-12T11:00:00Z"
+  },
+  {
+    "Id": 5,
+    "title": "Check in with Lisa Brown",
+    "description": "Monthly check-in call with existing client",
+    "dueDate": "2024-01-19T15:00:00Z",
+    "priority": "medium",
+    "status": "pending",
+    "contactId": 5,
+    "contactName": "Lisa Brown",
+    "type": "call",
+    "createdAt": "2024-01-08T14:00:00Z",
+    "updatedAt": "2024-01-08T14:00:00Z"
+  }
+]
