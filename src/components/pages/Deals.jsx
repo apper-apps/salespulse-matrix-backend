@@ -23,8 +23,22 @@ const Deals = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [showAddModal, setShowAddModal] = useState(false);
+const [showAddModal, setShowAddModal] = useState(false);
   const [editingDeal, setEditingDeal] = useState(null);
+
+  const handleEditRecord = (deal) => {
+    setEditingDeal(deal);
+    setFormData({
+      title: deal.title || '',
+      value: deal.value || '',
+      stage: deal.stage || 'prospect',
+      probability: deal.probability || '',
+      contactId: deal.contactId || '',
+      companyId: deal.companyId || '',
+      expectedCloseDate: deal.expectedCloseDate || ''
+    });
+    setShowAddModal(true);
+  };
   const [viewMode, setViewMode] = useState("kanban"); // 'kanban' or 'table'
   const [formData, setFormData] = useState({
     title: "",
@@ -86,7 +100,7 @@ const Deals = () => {
         await dealsService.create(dealData);
         toast.success("Deal created successfully!");
       }
-      setShowAddModal(false);
+setShowAddModal(false);
       setEditingDeal(null);
       resetForm();
       loadDeals();
@@ -118,6 +132,7 @@ const Deals = () => {
       probability: deal.probability?.toString() || "25",
       expectedCloseDate: deal.expectedCloseDate ? format(new Date(deal.expectedCloseDate), "yyyy-MM-dd") : ""
     });
+setEditingDeal(null);
     setShowAddModal(true);
   };
 
@@ -190,7 +205,11 @@ const Deals = () => {
             
             <div className="space-y-3">
               {stageDeals.map((deal) => (
-                <Card key={deal.Id} className="p-4 hover:shadow-lg transition-all duration-200 cursor-pointer">
+<Card 
+                  key={deal.Id} 
+                  className="p-4 hover:shadow-lg transition-all duration-200 cursor-pointer"
+                  onClick={() => handleEditRecord(deal)}
+                >
                   <div className="space-y-2">
                     <div className="flex items-start justify-between">
                       <h4 className="font-medium text-sm text-gray-900 line-clamp-2">
@@ -290,6 +309,7 @@ const Deals = () => {
             onClick={() => {
               setEditingDeal(null);
               resetForm();
+setEditingDeal(null);
               setShowAddModal(true);
             }}
             className="shadow-lg"
@@ -331,121 +351,131 @@ const Deals = () => {
       )}
 
       {/* Add/Edit Modal */}
-      {showAddModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+{showAddModal && (
+        <div className="fixed inset-0 z-50 overflow-hidden">
+          <div className="absolute inset-0 overflow-hidden">
             <div 
-              className="fixed inset-0 bg-black bg-opacity-25 transition-opacity"
+              className="absolute inset-0 bg-black bg-opacity-25 transition-opacity"
               onClick={() => setShowAddModal(false)}
             />
             
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <form onSubmit={handleSubmit} className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-medium text-gray-900">
-                    {editingDeal ? "Edit Deal" : "Add New Deal"}
-                  </h3>
-                  <button
-                    type="button"
-                    onClick={() => setShowAddModal(false)}
-                    className="text-gray-400 hover:text-gray-600"
-                  >
-                    <ApperIcon name="X" className="w-6 h-6" />
-                  </button>
-                </div>
+            <div className="fixed inset-y-0 right-0 pl-10 max-w-full flex">
+              <div className="w-screen max-w-md transform transition-transform ease-in-out duration-300 translate-x-0">
+                <div className="h-full flex flex-col bg-white shadow-xl">
+                  <form onSubmit={handleSubmit} className="h-full flex flex-col">
+                    <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-medium text-gray-900">
+                          {editingDeal ? "Edit Deal" : "Add New Deal"}
+                        </h3>
+                        <button
+                          type="button"
+                          onClick={() => setShowAddModal(false)}
+                          className="text-gray-400 hover:text-gray-600"
+                        >
+                          <ApperIcon name="X" className="w-6 h-6" />
+                        </button>
+                      </div>
+                    </div>
 
-                <div className="space-y-4">
-                  <Input
-                    label="Deal Title"
-                    value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    required
-                    placeholder="Enter deal title"
-                  />
-                  
-                  <Input
-                    label="Deal Value ($)"
-                    type="number"
-                    value={formData.value}
-                    onChange={(e) => setFormData({ ...formData, value: e.target.value })}
-                    required
-                    placeholder="0"
-                  />
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <Select
-                      label="Stage"
-                      value={formData.stage}
-                      onChange={(e) => setFormData({ ...formData, stage: e.target.value })}
-                      required
-                    >
-                      {dealStages.map((stage) => (
-                        <option key={stage.key} value={stage.key}>
-                          {stage.label}
-                        </option>
-                      ))}
-                    </Select>
-                    
-                    <Input
-                      label="Probability (%)"
-                      type="number"
-                      min="0"
-                      max="100"
-                      value={formData.probability}
-                      onChange={(e) => setFormData({ ...formData, probability: e.target.value })}
-                      required
-                    />
-                  </div>
-                  
-                  <Select
-                    label="Contact"
-                    value={formData.contactId}
-                    onChange={(e) => setFormData({ ...formData, contactId: e.target.value })}
-                    required
-                  >
-                    <option value="">Select a contact</option>
-                    {contacts.map((contact) => (
-                      <option key={contact.Id} value={contact.Id}>
-                        {contact.firstName} {contact.lastName}
-                      </option>
-                    ))}
-                  </Select>
-                  
-                  <Select
-                    label="Company"
-                    value={formData.companyId}
-                    onChange={(e) => setFormData({ ...formData, companyId: e.target.value })}
-                    required
-                  >
-                    <option value="">Select a company</option>
-                    {companies.map((company) => (
-                      <option key={company.Id} value={company.Id}>
-                        {company.name}
-                      </option>
-                    ))}
-                  </Select>
-                  
-                  <Input
-                    label="Expected Close Date"
-                    type="date"
-                    value={formData.expectedCloseDate}
-                    onChange={(e) => setFormData({ ...formData, expectedCloseDate: e.target.value })}
-                  />
-                </div>
+                    <div className="flex-1 px-6 py-6 overflow-y-auto">
+                      <div className="space-y-4">
+                        <Input
+                          label="Deal Title"
+                          value={formData.title}
+                          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                          required
+                          placeholder="Enter deal title"
+                        />
+                        
+                        <Input
+                          label="Deal Value ($)"
+                          type="number"
+                          value={formData.value}
+                          onChange={(e) => setFormData({ ...formData, value: e.target.value })}
+                          required
+                          placeholder="0"
+                        />
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                          <Select
+                            label="Stage"
+                            value={formData.stage}
+                            onChange={(e) => setFormData({ ...formData, stage: e.target.value })}
+                            required
+                          >
+                            {dealStages.map((stage) => (
+                              <option key={stage.key} value={stage.key}>
+                                {stage.label}
+                              </option>
+                            ))}
+                          </Select>
+                          
+                          <Input
+                            label="Probability (%)"
+                            type="number"
+                            min="0"
+                            max="100"
+                            value={formData.probability}
+                            onChange={(e) => setFormData({ ...formData, probability: e.target.value })}
+                            required
+                          />
+                        </div>
+                        
+                        <Select
+                          label="Contact"
+                          value={formData.contactId}
+                          onChange={(e) => setFormData({ ...formData, contactId: e.target.value })}
+                          required
+                        >
+                          <option value="">Select a contact</option>
+                          {contacts.map((contact) => (
+                            <option key={contact.Id} value={contact.Id}>
+                              {contact.firstName} {contact.lastName}
+                            </option>
+                          ))}
+                        </Select>
+                        
+                        <Select
+                          label="Company"
+                          value={formData.companyId}
+                          onChange={(e) => setFormData({ ...formData, companyId: e.target.value })}
+                          required
+                        >
+                          <option value="">Select a company</option>
+                          {companies.map((company) => (
+                            <option key={company.Id} value={company.Id}>
+                              {company.name}
+                            </option>
+                          ))}
+                        </Select>
+                        
+                        <Input
+                          label="Expected Close Date"
+                          type="date"
+                          value={formData.expectedCloseDate}
+                          onChange={(e) => setFormData({ ...formData, expectedCloseDate: e.target.value })}
+                        />
+                      </div>
+                    </div>
 
-                <div className="flex justify-end space-x-3 mt-6">
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => setShowAddModal(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit" variant="primary">
-                    {editingDeal ? "Update Deal" : "Add Deal"}
-                  </Button>
+                    <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                      <div className="flex justify-end space-x-3">
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          onClick={() => setShowAddModal(false)}
+                        >
+                          Cancel
+                        </Button>
+                        <Button type="submit" variant="primary">
+                          {editingDeal ? "Update Deal" : "Add Deal"}
+                        </Button>
+                      </div>
+                    </div>
+                  </form>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>

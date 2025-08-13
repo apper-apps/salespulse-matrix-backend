@@ -20,8 +20,19 @@ const Companies = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [showAddModal, setShowAddModal] = useState(false);
+const [showAddModal, setShowAddModal] = useState(false);
   const [editingCompany, setEditingCompany] = useState(null);
+
+  const handleEditRecord = (company) => {
+    setEditingCompany(company);
+    setFormData({
+      name: company.name || '',
+      industry: company.industry || '',
+      website: company.website || '',
+      employeeCount: company.employeeCount || ''
+    });
+    setShowAddModal(true);
+  };
   const [formData, setFormData] = useState({
     name: "",
     industry: "",
@@ -60,7 +71,7 @@ const Companies = () => {
         await companiesService.create(formData);
         toast.success("Company created successfully!");
       }
-      setShowAddModal(false);
+setShowAddModal(false);
       setEditingCompany(null);
       setFormData({
         name: "",
@@ -82,6 +93,7 @@ const Companies = () => {
       website: company.website,
       employeeCount: company.employeeCount
     });
+setEditingCompany(null);
     setShowAddModal(true);
   };
 
@@ -106,8 +118,11 @@ const Companies = () => {
       key: "name",
       title: "Company",
       sortable: true,
-      render: (_, company) => (
-        <div className="flex items-center space-x-3">
+render: (_, company) => (
+        <div 
+          className="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 -m-2 p-2 rounded-lg transition-colors"
+          onClick={() => handleEditRecord(company)}
+        >
           <div className="w-10 h-10 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
             <ApperIcon name="Building2" className="w-5 h-5 text-white" />
           </div>
@@ -217,6 +232,7 @@ const Companies = () => {
               website: "",
               employeeCount: ""
             });
+setEditingCompany(null);
             setShowAddModal(true);
           }}
           className="shadow-lg"
@@ -257,7 +273,7 @@ const Companies = () => {
               employeeCount: ""
             });
             setShowAddModal(true);
-          }}
+}}
           icon="Building2"
         />
       ) : (
@@ -275,86 +291,96 @@ const Companies = () => {
       )}
 
       {/* Add/Edit Modal */}
-      {showAddModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+{showAddModal && (
+        <div className="fixed inset-0 z-50 overflow-hidden">
+          <div className="absolute inset-0 overflow-hidden">
             <div 
-              className="fixed inset-0 bg-black bg-opacity-25 transition-opacity"
+              className="absolute inset-0 bg-black bg-opacity-25 transition-opacity"
               onClick={() => setShowAddModal(false)}
             />
             
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <form onSubmit={handleSubmit} className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-medium text-gray-900">
-                    {editingCompany ? "Edit Company" : "Add New Company"}
-                  </h3>
-                  <button
-                    type="button"
-                    onClick={() => setShowAddModal(false)}
-                    className="text-gray-400 hover:text-gray-600"
-                  >
-                    <ApperIcon name="X" className="w-6 h-6" />
-                  </button>
-                </div>
+            <div className="fixed inset-y-0 right-0 pl-10 max-w-full flex">
+              <div className="w-screen max-w-md transform transition-transform ease-in-out duration-300 translate-x-0">
+                <div className="h-full flex flex-col bg-white shadow-xl">
+                  <form onSubmit={handleSubmit} className="h-full flex flex-col">
+                    <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-medium text-gray-900">
+                          {editingCompany ? "Edit Company" : "Add New Company"}
+                        </h3>
+                        <button
+                          type="button"
+                          onClick={() => setShowAddModal(false)}
+                          className="text-gray-400 hover:text-gray-600"
+                        >
+                          <ApperIcon name="X" className="w-6 h-6" />
+                        </button>
+                      </div>
+                    </div>
 
-                <div className="space-y-4">
-                  <Input
-                    label="Company Name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    required
-                    placeholder="Enter company name"
-                  />
-                  
-                  <Select
-                    label="Industry"
-                    value={formData.industry}
-                    onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
-                    required
-                  >
-                    <option value="">Select an industry</option>
-                    {industryOptions.map((industry) => (
-                      <option key={industry} value={industry}>
-                        {industry}
-                      </option>
-                    ))}
-                  </Select>
-                  
-                  <Input
-                    label="Website"
-                    value={formData.website}
-                    onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                    placeholder="https://example.com"
-                  />
-                  
-                  <Select
-                    label="Employee Count"
-                    value={formData.employeeCount}
-                    onChange={(e) => setFormData({ ...formData, employeeCount: e.target.value })}
-                  >
-                    <option value="">Select company size</option>
-                    {employeeCountOptions.map((size) => (
-                      <option key={size} value={size}>
-                        {size} employees
-                      </option>
-                    ))}
-                  </Select>
-                </div>
+                    <div className="flex-1 px-6 py-6 overflow-y-auto">
+                      <div className="space-y-4">
+                        <Input
+                          label="Company Name"
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          required
+                          placeholder="Enter company name"
+                        />
+                        
+                        <Select
+                          label="Industry"
+                          value={formData.industry}
+                          onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
+                          required
+                        >
+                          <option value="">Select an industry</option>
+                          {industryOptions.map((industry) => (
+                            <option key={industry} value={industry}>
+                              {industry}
+                            </option>
+                          ))}
+                        </Select>
+                        
+                        <Input
+                          label="Website"
+                          value={formData.website}
+                          onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                          placeholder="https://example.com"
+                        />
+                        
+                        <Select
+                          label="Employee Count"
+                          value={formData.employeeCount}
+                          onChange={(e) => setFormData({ ...formData, employeeCount: e.target.value })}
+                        >
+                          <option value="">Select company size</option>
+                          {employeeCountOptions.map((size) => (
+                            <option key={size} value={size}>
+                              {size} employees
+                            </option>
+                          ))}
+                        </Select>
+                      </div>
+                    </div>
 
-                <div className="flex justify-end space-x-3 mt-6">
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => setShowAddModal(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit" variant="primary">
-                    {editingCompany ? "Update Company" : "Add Company"}
-                  </Button>
+                    <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                      <div className="flex justify-end space-x-3">
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          onClick={() => setShowAddModal(false)}
+                        >
+                          Cancel
+                        </Button>
+                        <Button type="submit" variant="primary">
+                          {editingCompany ? "Update Company" : "Add Company"}
+                        </Button>
+                      </div>
+                    </div>
+                  </form>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
