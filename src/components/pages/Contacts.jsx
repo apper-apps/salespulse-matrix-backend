@@ -26,20 +26,22 @@ const [showAddModal, setShowAddModal] = useState(false);
 
   const handleEditRecord = (contact) => {
     setEditingContact(contact);
-    setFormData({
+setFormData({
       firstName: contact.firstName || '',
       lastName: contact.lastName || '',
       email: contact.email || '',
+      linkedinProfile: contact.linkedinProfile || '',
       phone: contact.phone || '',
       companyId: contact.companyId || '',
       position: contact.position || ''
     });
     setShowAddModal(true);
   };
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
+    linkedinProfile: "",
     phone: "",
     companyId: "",
     position: ""
@@ -78,10 +80,11 @@ const [showAddModal, setShowAddModal] = useState(false);
       }
 setShowAddModal(false);
       setEditingContact(null);
-      setFormData({
+setFormData({
         firstName: "",
         lastName: "",
         email: "",
+        linkedinProfile: "",
         phone: "",
         companyId: "",
         position: ""
@@ -94,10 +97,11 @@ setShowAddModal(false);
 
   const handleEdit = (contact) => {
     setEditingContact(contact);
-    setFormData({
+setFormData({
       firstName: contact.firstName,
       lastName: contact.lastName,
       email: contact.email,
+      linkedinProfile: contact.linkedinProfile || "",
       phone: contact.phone,
       companyId: contact.companyId?.toString() || "",
       position: contact.position
@@ -207,9 +211,10 @@ render: (_, contact) => (
           onClick={() => {
             setEditingContact(null);
             setFormData({
-              firstName: "",
+firstName: "",
               lastName: "",
               email: "",
+              linkedinProfile: "",
               phone: "",
               companyId: "",
               position: ""
@@ -249,9 +254,10 @@ setEditingContact(null);
           onAction={() => {
             setEditingContact(null);
             setFormData({
-              firstName: "",
+firstName: "",
               lastName: "",
               email: "",
+              linkedinProfile: "",
               phone: "",
               companyId: "",
               position: ""
@@ -320,12 +326,20 @@ setEditingContact(null);
                           />
                         </div>
                         
-                        <Input
+<Input
                           label="Email"
                           type="email"
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           required
+                        />
+                        
+                        <Input
+                          label="LinkedIn Profile"
+                          type="url"
+                          value={formData.linkedinProfile}
+                          onChange={(e) => setFormData({ ...formData, linkedinProfile: e.target.value })}
+                          placeholder="https://linkedin.com/in/username"
                         />
                         
                         <Input
