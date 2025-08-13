@@ -26,11 +26,12 @@ export default function HotLead() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     company: '',
+    linkedin: '',
     status: 'new',
     score: 85,
     source: '',
@@ -93,12 +94,13 @@ export default function HotLead() {
     }
   };
 
-  const resetForm = () => {
+const resetForm = () => {
     setFormData({
       name: '',
       email: '',
       phone: '',
       company: '',
+      linkedin: '',
       status: 'new',
       score: 85,
       source: '',
@@ -107,13 +109,14 @@ export default function HotLead() {
     setSelectedLead(null);
   };
 
-  const openEditModal = (lead) => {
+const openEditModal = (lead) => {
     setSelectedLead(lead);
     setFormData({
       name: lead.name,
       email: lead.email,
       phone: lead.phone,
       company: lead.company,
+      linkedin: lead.linkedin || '',
       status: lead.status,
       score: lead.score,
       source: lead.source,
@@ -362,7 +365,7 @@ export default function HotLead() {
                   required
                 />
                 <Input
-                  label="Phone"
+label="Phone"
                   value={formData.phone}
                   onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                 />
@@ -370,6 +373,12 @@ export default function HotLead() {
                   label="Company"
                   value={formData.company}
                   onChange={(e) => setFormData(prev => ({ ...prev, company: e.target.value }))}
+                />
+                <Input
+                  label="LinkedIn Profile"
+                  value={formData.linkedin}
+                  onChange={(e) => setFormData(prev => ({ ...prev, linkedin: e.target.value }))}
+                  placeholder="https://linkedin.com/in/username"
                   required
                 />
                 <Select
@@ -460,7 +469,7 @@ export default function HotLead() {
                   required
                 />
                 <Input
-                  label="Phone"
+label="Phone"
                   value={formData.phone}
                   onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                 />
@@ -468,6 +477,12 @@ export default function HotLead() {
                   label="Company"
                   value={formData.company}
                   onChange={(e) => setFormData(prev => ({ ...prev, company: e.target.value }))}
+                />
+                <Input
+                  label="LinkedIn Profile"
+                  value={formData.linkedin}
+                  onChange={(e) => setFormData(prev => ({ ...prev, linkedin: e.target.value }))}
+                  placeholder="https://linkedin.com/in/username"
                   required
                 />
                 <Select

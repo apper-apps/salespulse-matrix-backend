@@ -28,11 +28,12 @@ export const leadService = {
     });
   },
 
-  createHotLead: (leadData) => {
+createHotLead: (leadData) => {
     return new Promise((resolve) => {
       setTimeout(() => {
         const newLead = {
           ...leadData,
+          linkedin: leadData.linkedin || '',
           Id: Math.max(...hotLeads.map(l => l.Id), 0) + 1,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -43,7 +44,7 @@ export const leadService = {
     });
   },
 
-  updateHotLead: (id, leadData) => {
+updateHotLead: (id, leadData) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         const index = hotLeads.findIndex(l => l.Id === parseInt(id));
@@ -51,6 +52,7 @@ export const leadService = {
           const updatedLead = {
             ...hotLeads[index],
             ...leadData,
+            linkedin: leadData.linkedin || hotLeads[index].linkedin || '',
             Id: parseInt(id),
             updatedAt: new Date().toISOString()
           };
@@ -99,11 +101,12 @@ export const leadService = {
     });
   },
 
-  createColdLead: (leadData) => {
+createColdLead: (leadData) => {
     return new Promise((resolve) => {
       setTimeout(() => {
         const newLead = {
           ...leadData,
+          linkedin: leadData.linkedin || '',
           Id: Math.max(...coldLeads.map(l => l.Id), 0) + 1,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -114,7 +117,7 @@ export const leadService = {
     });
   },
 
-  updateColdLead: (id, leadData) => {
+updateColdLead: (id, leadData) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         const index = coldLeads.findIndex(l => l.Id === parseInt(id));
@@ -122,6 +125,7 @@ export const leadService = {
           const updatedLead = {
             ...coldLeads[index],
             ...leadData,
+            linkedin: leadData.linkedin || coldLeads[index].linkedin || '',
             Id: parseInt(id),
             updatedAt: new Date().toISOString()
           };
