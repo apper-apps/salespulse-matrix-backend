@@ -257,10 +257,11 @@ export const contactsService = {
     }
   },
 
-  async delete(id) {
+async delete(idOrIds) {
     try {
+      const ids = Array.isArray(idOrIds) ? idOrIds : [idOrIds];
       const params = {
-        RecordIds: [parseInt(id)]
+        RecordIds: ids.map(id => parseInt(id))
       };
 
       const response = await apperClient.deleteRecord(TABLE_NAME, params);
@@ -285,7 +286,7 @@ export const contactsService = {
         return successfulRecords.length > 0;
       }
     } catch (error) {
-      console.error("Error deleting contact:", error.message);
+      console.error("Error deleting contact(s):", error.message);
       throw error;
     }
   }

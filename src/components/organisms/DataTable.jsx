@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import { cn } from "@/utils/cn";
@@ -9,9 +9,13 @@ const DataTable = ({
   onRowClick, 
   actions,
   searchTerm = "",
-  loading = false
+  loading = false,
+  selectable = false,
+  selectedItems = [],
+  onSelectItem,
+  onSelectAll
 }) => {
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -24,7 +28,7 @@ const DataTable = ({
         return value?.toString().toLowerCase().includes(searchTerm.toLowerCase());
       })
     );
-  }, [data, searchTerm, columns]);
+}, [data, searchTerm, columns]);
 
   const sortedData = useMemo(() => {
     if (!sortConfig.key) return filteredData;
@@ -33,16 +37,36 @@ const DataTable = ({
       const aValue = a[sortConfig.key];
       const bValue = b[sortConfig.key];
 
-      if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
-      if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
-      return 0;
+      if (aValue === null || aValue === undefined) return 1;
+      if (bValue === null || bValue === undefined) return -1;
+
+      if (typeof aValue === "string" && typeof bValue === "string") {
+        return sortConfig.direction === "asc" 
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      }
+
+      if (sortConfig.direction === "asc") {
+        return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+      } else {
+        return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+      }
     });
   }, [filteredData, sortConfig]);
 
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     return sortedData.slice(startIndex, startIndex + itemsPerPage);
-  }, [sortedData, currentPage]);
+  }, [sortedData, currentPage, itemsPerPage]);
+
+  // Selection state management
+  const isAllSelected = useMemo(() => {
+    return paginatedData.length > 0 && paginatedData.every(item => selectedItems.includes(item.Id));
+  }, [paginatedData, selectedItems]);
+
+  const isSomeSelected = useMemo(() => {
+return paginatedData.some(item => selectedItems.includes(item.Id)) && !isAllSelected;
+  }, [paginatedData, selectedItems, isAllSelected]);
 
   const totalPages = Math.ceil(sortedData.length / itemsPerPage);
 
@@ -53,8 +77,25 @@ const DataTable = ({
     }));
   };
 
+  const handleSelectAll = () => {
+    if (onSelectAll) {
+      if (isAllSelected) {
+        // Deselect all current page items
+        const pageIds = paginatedData.map(item => item.Id);
+        pageIds.forEach(id => onSelectItem(id));
+      } else {
+        // Select all current page items that aren't already selected
+        paginatedData.forEach(item => {
+          if (!selectedItems.includes(item.Id)) {
+            onSelectItem(item.Id);
+          }
+        });
+      }
+    }
+  };
+
   const getSortIcon = (key) => {
-    if (sortConfig.key !== key) return "ArrowUpDown";
+if (sortConfig.key !== key) return "ArrowUpDown";
     return sortConfig.direction === "asc" ? "ArrowUp" : "ArrowDown";
   };
 
@@ -89,10 +130,23 @@ const DataTable = ({
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-      <div className="overflow-x-auto">
+<div className="overflow-x-auto">
         <table className="w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
+              {selectable && (
+                <th className="px-6 py-3 w-12">
+                  <input
+                    type="checkbox"
+                    checked={isAllSelected}
+                    ref={input => {
+                      if (input) input.indeterminate = isSomeSelected;
+                    }}
+                    onChange={handleSelectAll}
+                    className="w-4 h-4 text-primary-600 bg-white border-gray-300 rounded focus:ring-primary-500 focus:ring-2"
+                  />
+                </th>
+              )}
               {columns.map((column) => (
                 <th
                   key={column.key}
@@ -118,34 +172,51 @@ const DataTable = ({
                   Actions
                 </th>
               )}
-            </tr>
+</tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {paginatedData.map((row, index) => (
-              <tr
-                key={row.Id || index}
-                className={cn(
-                  "hover:bg-gray-50 transition-colors duration-200",
-                  onRowClick && "cursor-pointer"
-                )}
-                onClick={() => onRowClick && onRowClick(row)}
-              >
-                {columns.map((column) => (
-                  <td key={column.key} className="px-6 py-4 whitespace-nowrap">
-                    {column.render ? column.render(row[column.key], row) : (
-                      <span className="text-sm text-gray-900">
-                        {row[column.key] || "-"}
-                      </span>
-                    )}
-                  </td>
-                ))}
-                {actions && (
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    {actions(row)}
-                  </td>
-                )}
-              </tr>
-            ))}
+            {paginatedData.map((row, index) => {
+              const isSelected = selectedItems.includes(row.Id);
+              return (
+                <tr
+                  key={row.Id || index}
+                  className={cn(
+                    "transition-colors duration-200",
+                    isSelected ? "bg-blue-50 hover:bg-blue-100" : "hover:bg-gray-50",
+                    onRowClick && "cursor-pointer"
+                  )}
+                  onClick={() => onRowClick && onRowClick(row)}
+                >
+                  {selectable && (
+                    <td className="px-6 py-4 whitespace-nowrap w-12">
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={(e) => {
+                          e.stopPropagation();
+                          onSelectItem(row.Id);
+                        }}
+                        className="w-4 h-4 text-primary-600 bg-white border-gray-300 rounded focus:ring-primary-500 focus:ring-2"
+                      />
+                    </td>
+                  )}
+                  {columns.map((column) => (
+                    <td key={column.key} className="px-6 py-4 whitespace-nowrap">
+                      {column.render ? column.render(row[column.key], row) : (
+                        <span className="text-sm text-gray-900">
+                          {row[column.key] || "-"}
+                        </span>
+                      )}
+                    </td>
+                  ))}
+                  {actions && (
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      {actions(row)}
+                    </td>
+                  )}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

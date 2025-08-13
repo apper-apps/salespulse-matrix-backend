@@ -23,7 +23,8 @@ const Contacts = () => {
   const [searchTerm, setSearchTerm] = useState("");
 const [showAddModal, setShowAddModal] = useState(false);
   const [editingContact, setEditingContact] = useState(null);
-
+const [selectedContacts, setSelectedContacts] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 const handleEditRecord = (contact) => {
     setEditingContact(contact);
 setFormData({
@@ -101,9 +102,9 @@ setFormData({
     }
   };
 
-  const handleEdit = (contact) => {
+const handleEdit = (contact) => {
     setEditingContact(contact);
-setFormData({
+    setFormData({
       firstName: contact.firstName,
       lastName: contact.lastName,
       email: contact.email,
@@ -114,20 +115,50 @@ setFormData({
       leadType: contact.leadType || "contact",
       score: contact.score || 50
     });
-setEditingContact(null);
+    setEditingContact(null);
     setShowAddModal(true);
   };
 
-  const handleDelete = async (contact) => {
-    if (window.confirm(`Are you sure you want to delete ${contact.firstName} ${contact.lastName}?`)) {
+  const handleSelectContact = (contactId) => {
+    setSelectedContacts(prev => 
+      prev.includes(contactId) 
+        ? prev.filter(id => id !== contactId)
+        : [...prev, contactId]
+    );
+  };
+
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedContacts([]);
+      setSelectAll(false);
+    } else {
+      setSelectedContacts(contacts.map(contact => contact.Id));
+      setSelectAll(true);
+    }
+  };
+
+  const handleDelete = async (contactOrIds) => {
+    const isArray = Array.isArray(contactOrIds);
+    const ids = isArray ? contactOrIds : [contactOrIds.Id];
+    const confirmMessage = isArray 
+      ? `Are you sure you want to delete ${ids.length} selected contacts?`
+      : `Are you sure you want to delete ${contactOrIds.firstName} ${contactOrIds.lastName}?`;
+
+    if (window.confirm(confirmMessage)) {
       try {
-        await contactsService.delete(contact.Id);
-        toast.success("Contact deleted successfully!");
+        await contactsService.delete(ids);
+        toast.success(isArray ? `${ids.length} contacts deleted successfully!` : "Contact deleted successfully!");
+        setSelectedContacts([]);
+        setSelectAll(false);
         loadContacts();
       } catch (err) {
-        toast.error(err.message || "Failed to delete contact");
+        toast.error(err.message || "Failed to delete contact(s)");
       }
     }
+  };
+
+  const handleBulkDelete = () => {
+    handleDelete(selectedContacts);
   };
 
   const getCompanyName = (companyId) => {
@@ -235,10 +266,10 @@ render: (_, contact) => (
         <Button 
           variant="primary" 
           icon="Plus"
-          onClick={() => {
+onClick={() => {
             setEditingContact(null);
-setFormData({
-firstName: "",
+            setFormData({
+              firstName: "",
               lastName: "",
               email: "",
               linkedinProfile: "",
@@ -248,7 +279,9 @@ firstName: "",
               leadType: "contact",
               score: 50
             });
-setEditingContact(null);
+            setEditingContact(null);
+            setSelectedContacts([]);
+            setSelectAll(false);
             setShowAddModal(true);
           }}
           className="shadow-lg"
@@ -256,6 +289,38 @@ setEditingContact(null);
           Add Contact
         </Button>
       </div>
+
+      {/* Selection Summary and Bulk Actions */}
+      {selectedContacts.length > 0 && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex items-center space-x-4">
+              <span className="text-sm font-medium text-blue-900">
+                {selectedContacts.length} contact{selectedContacts.length !== 1 ? 's' : ''} selected
+              </span>
+              <button
+                onClick={() => {
+                  setSelectedContacts([]);
+                  setSelectAll(false);
+                }}
+                className="text-sm text-blue-600 hover:text-blue-800 underline"
+              >
+                Clear selection
+              </button>
+            </div>
+            <div className="flex space-x-2">
+              <Button 
+                variant="destructive" 
+                icon="Trash2"
+                onClick={handleBulkDelete}
+                size="small"
+              >
+                Delete Selected
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Search and Filters */}
       <div className="flex flex-col sm:flex-row gap-4">
@@ -280,10 +345,10 @@ setEditingContact(null);
           title="No contacts found"
           message="Start building your customer base by adding your first contact."
           actionLabel="Add Contact"
-          onAction={() => {
+onAction={() => {
             setEditingContact(null);
-setFormData({
-firstName: "",
+            setFormData({
+              firstName: "",
               lastName: "",
               email: "",
               linkedinProfile: "",
@@ -293,7 +358,9 @@ firstName: "",
               leadType: "contact",
               score: 50
             });
-setEditingContact(null);
+            setEditingContact(null);
+            setSelectedContacts([]);
+            setSelectAll(false);
             setShowAddModal(true);
           }}
           icon="Users"
@@ -303,6 +370,10 @@ setEditingContact(null);
           data={contacts}
           columns={columns}
           searchTerm={searchTerm}
+          selectable={true}
+          selectedItems={selectedContacts}
+          onSelectItem={handleSelectContact}
+          onSelectAll={handleSelectAll}
           actions={(contact) => (
             <ActionButtons
               onEdit={() => handleEdit(contact)}
