@@ -187,11 +187,10 @@ const [contactsData, companiesData, dealsData, activitiesData, hotLeadsData, col
           gradient="bg-gradient-to-r from-blue-500 to-blue-600"
         />
       </div>
-
-      {/* Content Grid */}
+{/* Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Recent Activities */}
-<div className="lg:col-span-2">
+        <div className="lg:col-span-2">
           <Card className="p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold text-gray-900">Recent Activities</h2>
@@ -232,6 +231,72 @@ const [contactsData, companiesData, dealsData, activitiesData, hotLeadsData, col
                   </div>
                 </div>
               ))}
+            </div>
+          </Card>
+        </div>
+
+        {/* Quick Actions */}
+        <div>
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">Quick Actions</h2>
+            <div className="space-y-4">
+              {quickActions.map((action, index) => (
+                <div
+                  key={index}
+                  onClick={action.action}
+                  className="flex items-start space-x-4 p-4 rounded-lg border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all duration-200 cursor-pointer group transform hover:scale-[1.02]"
+                >
+                  <div className={`w-10 h-10 ${action.gradient} rounded-lg flex items-center justify-center group-hover:shadow-lg transition-shadow duration-200`}>
+                    <ApperIcon name={action.icon} className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium text-gray-900 group-hover:text-primary-600 transition-colors duration-200">
+                      {action.title}
+                    </p>
+                    <p className="text-sm text-gray-500 mt-1">{action.description}</p>
+                  </div>
+                  <ApperIcon name="ChevronRight" className="w-5 h-5 text-gray-400 group-hover:text-primary-500 transition-colors duration-200" />
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* Summary Stats */}
+          <Card className="p-6 mt-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">Summary</h2>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <ApperIcon name="Users" className="w-5 h-5 text-blue-500" />
+                  <span className="text-gray-700">Total Contacts</span>
+                </div>
+                <span className="font-semibold text-gray-900">{contacts.length}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <ApperIcon name="Building2" className="w-5 h-5 text-green-500" />
+                  <span className="text-gray-700">Companies</span>
+                </div>
+                <span className="font-semibold text-gray-900">{companies.length}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <ApperIcon name="Target" className="w-5 h-5 text-purple-500" />
+                  <span className="text-gray-700">Active Deals</span>
+                </div>
+                <span className="font-semibold text-gray-900">
+                  {deals.filter(d => !["won", "lost"].includes(d.stage)).length}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <ApperIcon name="CheckSquare" className="w-5 h-5 text-pink-500" />
+                  <span className="text-gray-700">Pending Tasks</span>
+                </div>
+                <span className="font-semibold text-gray-900">
+                  {activities.filter(a => a.status === "pending").length}
+                </span>
+              </div>
             </div>
           </Card>
         </div>
@@ -449,73 +514,6 @@ const [contactsData, companiesData, dealsData, activitiesData, hotLeadsData, col
           </div>
         </div>
       )}
-
-        {/* Quick Actions */}
-        <div>
-          <Card className="p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">Quick Actions</h2>
-            <div className="space-y-4">
-              {quickActions.map((action, index) => (
-                <div
-                  key={index}
-                  onClick={action.action}
-                  className="flex items-start space-x-4 p-4 rounded-lg border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all duration-200 cursor-pointer group transform hover:scale-[1.02]"
-                >
-                  <div className={`w-10 h-10 ${action.gradient} rounded-lg flex items-center justify-center group-hover:shadow-lg transition-shadow duration-200`}>
-                    <ApperIcon name={action.icon} className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-medium text-gray-900 group-hover:text-primary-600 transition-colors duration-200">
-                      {action.title}
-                    </p>
-                    <p className="text-sm text-gray-500 mt-1">{action.description}</p>
-                  </div>
-                  <ApperIcon name="ChevronRight" className="w-5 h-5 text-gray-400 group-hover:text-primary-500 transition-colors duration-200" />
-                </div>
-              ))}
-            </div>
-          </Card>
-
-          {/* Summary Stats */}
-          <Card className="p-6 mt-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">Summary</h2>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <ApperIcon name="Users" className="w-5 h-5 text-blue-500" />
-                  <span className="text-gray-700">Total Contacts</span>
-                </div>
-                <span className="font-semibold text-gray-900">{contacts.length}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <ApperIcon name="Building2" className="w-5 h-5 text-green-500" />
-                  <span className="text-gray-700">Companies</span>
-                </div>
-                <span className="font-semibold text-gray-900">{companies.length}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <ApperIcon name="Target" className="w-5 h-5 text-purple-500" />
-                  <span className="text-gray-700">Active Deals</span>
-                </div>
-                <span className="font-semibold text-gray-900">
-                  {deals.filter(d => !["won", "lost"].includes(d.stage)).length}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <ApperIcon name="CheckSquare" className="w-5 h-5 text-pink-500" />
-                  <span className="text-gray-700">Pending Tasks</span>
-                </div>
-                <span className="font-semibold text-gray-900">
-                  {activities.filter(a => a.status === "pending").length}
-                </span>
-              </div>
-            </div>
-          </Card>
-        </div>
-</div>
     </div>
   );
 };
