@@ -1,0 +1,80 @@
+[
+  {
+    "Id": 1,
+    "name": "Sarah Mitchell",
+    "email": "sarah.mitchell@techcorp.com",
+    "phone": "+1 (555) 123-4567",
+    "company": "TechCorp Solutions",
+    "status": "qualified",
+    "score": 92,
+    "source": "Website Contact Form",
+    "notes": "Very interested in enterprise solution. Budget approved for Q1.",
+    "createdAt": "2024-01-15T10:30:00Z",
+    "updatedAt": "2024-01-20T14:45:00Z"
+  },
+  {
+    "Id": 2,
+    "name": "Michael Chen",
+    "email": "m.chen@innovatetech.com",
+    "phone": "+1 (555) 234-5678",
+    "company": "InnovateTech Inc",
+    "status": "in_progress",
+    "score": 88,
+    "source": "LinkedIn Campaign",
+    "notes": "Scheduled demo for next week. Showed strong interest in automation features.",
+    "createdAt": "2024-01-16T09:15:00Z",
+    "updatedAt": "2024-01-22T11:20:00Z"
+  },
+  {
+    "Id": 3,
+    "name": "Emily Rodriguez",
+    "email": "emily.r@digitalventures.com",
+    "phone": "+1 (555) 345-6789",
+    "company": "Digital Ventures LLC",
+    "status": "qualified",
+    "score": 95,
+    "source": "Referral",
+    "notes": "CEO referral from existing client. Ready to move forward quickly.",
+    "createdAt": "2024-01-18T16:22:00Z",
+    "updatedAt": "2024-01-23T10:15:00Z"
+  },
+  {
+    "Id": 4,
+    "name": "David Thompson",
+    "email": "david.thompson@futureworks.com",
+    "phone": "+1 (555) 456-7890",
+    "company": "FutureWorks Corp",
+    "status": "contacted",
+    "score": 85,
+    "source": "Trade Show",
+    "notes": "Met at CRM Expo. Interested in integration capabilities.",
+    "createdAt": "2024-01-19T13:45:00Z",
+    "updatedAt": "2024-01-24T09:30:00Z"
+  },
+  {
+    "Id": 5,
+    "name": "Lisa Park",
+    "email": "lisa.park@smartsystems.com",
+    "phone": "+1 (555) 567-8901",
+    "company": "Smart Systems Group",
+    "status": "new",
+    "score": 90,
+    "source": "Google Ads",
+    "notes": "Downloaded enterprise whitepaper. High engagement score.",
+    "createdAt": "2024-01-21T11:10:00Z",
+    "updatedAt": "2024-01-21T11:10:00Z"
+  },
+  {
+    "Id": 6,
+    "name": "Robert Kim",
+    "email": "robert.kim@nexustech.com",
+    "phone": "+1 (555) 678-9012",
+    "company": "Nexus Technologies",
+    "status": "converted",
+    "score": 98,
+    "source": "Direct Sales",
+    "notes": "Signed annual contract. Excellent reference for case studies.",
+    "createdAt": "2024-01-10T08:30:00Z",
+    "updatedAt": "2024-01-25T15:20:00Z"
+  }
+]

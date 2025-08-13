@@ -6,11 +6,13 @@ import { cn } from "@/utils/cn";
 const Sidebar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const navigationItems = [
+const navigationItems = [
     { name: "Dashboard", href: "/", icon: "BarChart3" },
     { name: "Contacts", href: "/contacts", icon: "Users" },
     { name: "Companies", href: "/companies", icon: "Building2" },
     { name: "Deals", href: "/deals", icon: "Target" },
+    { name: "Hot Lead", href: "/hot-lead", icon: "Thermometer" },
+    { name: "Cold Lead", href: "/cold-lead", icon: "Snowflake" },
     { name: "Activities", href: "/activities", icon: "CheckSquare" },
     { name: "Reports", href: "/reports", icon: "FileBarChart" }
   ];
