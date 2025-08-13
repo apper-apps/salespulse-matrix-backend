@@ -24,7 +24,7 @@ const Contacts = () => {
 const [showAddModal, setShowAddModal] = useState(false);
   const [editingContact, setEditingContact] = useState(null);
 
-  const handleEditRecord = (contact) => {
+const handleEditRecord = (contact) => {
     setEditingContact(contact);
 setFormData({
       firstName: contact.firstName || '',
@@ -33,7 +33,9 @@ setFormData({
       linkedinProfile: contact.linkedinProfile || '',
       phone: contact.phone || '',
       companyId: contact.companyId || '',
-      position: contact.position || ''
+      position: contact.position || '',
+      leadType: contact.leadType || 'contact',
+      score: contact.score || 50
     });
     setShowAddModal(true);
   };
@@ -44,7 +46,9 @@ const [formData, setFormData] = useState({
     linkedinProfile: "",
     phone: "",
     companyId: "",
-    position: ""
+    position: "",
+    leadType: "contact",
+    score: 50
   });
 
   const loadContacts = async () => {
@@ -87,7 +91,9 @@ setFormData({
         linkedinProfile: "",
         phone: "",
         companyId: "",
-        position: ""
+        position: "",
+        leadType: "contact",
+        score: 50
       });
       loadContacts();
     } catch (err) {
@@ -104,7 +110,9 @@ setFormData({
       linkedinProfile: contact.linkedinProfile || "",
       phone: contact.phone,
       companyId: contact.companyId?.toString() || "",
-      position: contact.position
+      position: contact.position,
+      leadType: contact.leadType || "contact",
+      score: contact.score || 50
     });
 setEditingContact(null);
     setShowAddModal(true);
@@ -127,7 +135,7 @@ setEditingContact(null);
     return company ? company.name : "Unknown Company";
   };
 
-  const columns = [
+const columns = [
     {
       key: "name",
       title: "Name",
@@ -158,6 +166,25 @@ render: (_, contact) => (
       render: (email) => (
         <div className="text-sm">
           <p className="text-gray-900">{email}</p>
+        </div>
+      )
+    },
+    {
+      key: "leadType",
+      title: "Type",
+      sortable: true,
+      render: (leadType, contact) => (
+        <div className="flex items-center space-x-2">
+          <span className={`px-2 py-1 text-xs font-medium rounded ${
+            leadType === 'hot' ? 'bg-red-100 text-red-800' :
+            leadType === 'cold' ? 'bg-blue-100 text-blue-800' :
+            'bg-gray-100 text-gray-800'
+          }`}>
+            {leadType === 'hot' ? 'Hot Lead' : leadType === 'cold' ? 'Cold Lead' : 'Contact'}
+          </span>
+          {leadType !== 'contact' && contact.score && (
+            <span className="text-xs text-gray-500">{contact.score}</span>
+          )}
         </div>
       )
     },
@@ -210,14 +237,16 @@ render: (_, contact) => (
           icon="Plus"
           onClick={() => {
             setEditingContact(null);
-            setFormData({
+setFormData({
 firstName: "",
               lastName: "",
               email: "",
               linkedinProfile: "",
               phone: "",
               companyId: "",
-              position: ""
+              position: "",
+              leadType: "contact",
+              score: 50
             });
 setEditingContact(null);
             setShowAddModal(true);
@@ -253,14 +282,16 @@ setEditingContact(null);
           actionLabel="Add Contact"
           onAction={() => {
             setEditingContact(null);
-            setFormData({
+setFormData({
 firstName: "",
               lastName: "",
               email: "",
               linkedinProfile: "",
               phone: "",
               companyId: "",
-              position: ""
+              position: "",
+              leadType: "contact",
+              score: 50
             });
 setEditingContact(null);
             setShowAddModal(true);
@@ -310,7 +341,7 @@ setEditingContact(null);
                     </div>
 
                     <div className="flex-1 px-6 py-6 overflow-y-auto">
-                      <div className="space-y-4">
+<div className="space-y-4">
                         <div className="grid grid-cols-1 gap-4">
                           <Input
                             label="First Name"
@@ -366,6 +397,32 @@ setEditingContact(null);
                           value={formData.position}
                           onChange={(e) => setFormData({ ...formData, position: e.target.value })}
                         />
+
+                        <Select
+                          label="Type"
+                          value={formData.leadType}
+                          onChange={(e) => setFormData({ ...formData, leadType: e.target.value })}
+                        >
+                          <option value="contact">Contact</option>
+                          <option value="hot">Hot Lead</option>
+                          <option value="cold">Cold Lead</option>
+                        </Select>
+
+                        {formData.leadType !== 'contact' && (
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Lead Score: {formData.score}
+                            </label>
+                            <input
+                              type="range"
+                              min="0"
+                              max="100"
+                              value={formData.score}
+                              onChange={(e) => setFormData({ ...formData, score: parseInt(e.target.value) })}
+                              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
 

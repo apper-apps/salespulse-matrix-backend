@@ -5,8 +5,6 @@ import Dashboard from "@/components/pages/Dashboard";
 import Contacts from "@/components/pages/Contacts";
 import Companies from "@/components/pages/Companies";
 import Deals from "@/components/pages/Deals";
-import HotLead from "@/components/pages/HotLead";
-import ColdLead from "@/components/pages/ColdLead";
 import Activities from "@/components/pages/Activities";
 import Reports from "@/components/pages/Reports";
 
@@ -20,8 +18,6 @@ function App() {
             <Route path="contacts" element={<Contacts />} />
             <Route path="companies" element={<Companies />} />
             <Route path="deals" element={<Deals />} />
-            <Route path="hot-lead" element={<HotLead />} />
-            <Route path="cold-lead" element={<ColdLead />} />
             <Route path="activities" element={<Activities />} />
             <Route path="reports" element={<Reports />} />
           </Route>

@@ -19,11 +19,13 @@ export const contactsService = {
     return { ...contact };
   },
 
-  async create(contactData) {
+async create(contactData) {
     await delay(400);
     const newContact = {
       Id: Math.max(...contacts.map(c => c.Id)) + 1,
       ...contactData,
+      leadType: contactData.leadType || 'contact',
+      score: contactData.score || (contactData.leadType === 'hot' ? 85 : contactData.leadType === 'cold' ? 25 : 50),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
@@ -31,7 +33,7 @@ export const contactsService = {
     return { ...newContact };
   },
 
-  async update(id, contactData) {
+async update(id, contactData) {
     await delay(350);
     const index = contacts.findIndex(c => c.Id === parseInt(id));
     if (index === -1) {
@@ -40,6 +42,8 @@ export const contactsService = {
     contacts[index] = {
       ...contacts[index],
       ...contactData,
+      leadType: contactData.leadType || contacts[index].leadType || 'contact',
+      score: contactData.score !== undefined ? contactData.score : contacts[index].score || 50,
       updatedAt: new Date().toISOString()
     };
     return { ...contacts[index] };
