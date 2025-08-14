@@ -9,6 +9,7 @@ const Sidebar = () => {
 const navigationItems = [
     { name: "Dashboard", href: "/", icon: "BarChart3" },
     { name: "Contacts", href: "/contacts", icon: "Users" },
+    { name: "Sales Pipeline", href: "/pipeline", icon: "GitBranch" },
     { name: "Reminders", href: "/reminders", icon: "Bell" },
     { name: "Follow Up", href: "/follow-up", icon: "Clock" },
     { name: "Deals", href: "/deals", icon: "Target" },
