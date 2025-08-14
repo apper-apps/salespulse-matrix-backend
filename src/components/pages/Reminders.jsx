@@ -205,11 +205,11 @@ const Reminders = () => {
   if (error) return <Error message={error} onRetry={fetchReminders} />;
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+<div className="p-4 max-w-7xl mx-auto">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Reminders</h1>
-          <p className="text-gray-600 mt-1">Manage your tasks and reminders</p>
+          <h1 className="text-2xl font-bold text-gray-900">Reminders</h1>
+          <p className="text-gray-600 text-sm">Manage your tasks and reminders</p>
         </div>
         
         <div className="flex gap-2">
@@ -237,8 +237,8 @@ const Reminders = () => {
       </div>
 
       {/* Filters */}
-      <Card className="mb-6 p-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+<Card className="mb-4 p-3">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
           <Input
             placeholder="Search reminders..."
             value={searchTerm}
@@ -249,7 +249,7 @@ const Reminders = () => {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
           >
             <option value="all">All Status</option>
             <option value="pending">Pending</option>
@@ -259,7 +259,7 @@ const Reminders = () => {
           <select
             value={filterPriority}
             onChange={(e) => setFilterPriority(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
           >
             <option value="all">All Priorities</option>
             <option value="high">High Priority</option>
@@ -268,7 +268,7 @@ const Reminders = () => {
           </select>
           
           <div className="flex items-center gap-2 text-sm text-gray-600">
-            <ApperIcon name="Clock" size={16} />
+            <ApperIcon name="Clock" size={14} />
             <span>{filteredReminders.length} reminders</span>
           </div>
         </div>
@@ -277,30 +277,30 @@ const Reminders = () => {
       {/* Calendar View */}
       {viewMode === 'calendar' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-          <Card className="lg:col-span-2 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold">
+<Card className="lg:col-span-2 p-4">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-base font-semibold">
                 {format(currentDate, 'MMMM yyyy')}
               </h2>
-              <div className="flex gap-2">
+              <div className="flex gap-1">
                 <Button variant="outline" size="sm" onClick={prevMonth}>
-                  <ApperIcon name="ChevronLeft" size={16} />
+                  <ApperIcon name="ChevronLeft" size={14} />
                 </Button>
                 <Button variant="outline" size="sm" onClick={nextMonth}>
-                  <ApperIcon name="ChevronRight" size={16} />
+                  <ApperIcon name="ChevronRight" size={14} />
                 </Button>
               </div>
             </div>
             
-            <div className="grid grid-cols-7 gap-2 mb-4">
+            <div className="grid grid-cols-7 gap-1 mb-3">
               {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                <div key={day} className="text-center text-sm font-medium text-gray-600 p-2">
+                <div key={day} className="text-center text-xs font-medium text-gray-600 p-1">
                   {day}
                 </div>
               ))}
             </div>
             
-            <div className="grid grid-cols-7 gap-2">
+            <div className="grid grid-cols-7 gap-1">
               {calendarDays.map(day => {
                 const dayReminders = getRemindersForDate(day);
                 const isSelected = isSameDay(day, selectedDate);
@@ -310,7 +310,7 @@ const Reminders = () => {
                   <button
                     key={day.toISOString()}
                     onClick={() => setSelectedDate(day)}
-                    className={`p-2 min-h-[60px] text-sm rounded-md border transition-colors ${
+                    className={`p-1.5 min-h-[50px] text-xs rounded-md border transition-colors ${
                       isSelected
                         ? 'bg-blue-500 text-white border-blue-500'
                         : isCurrentMonth
@@ -322,7 +322,7 @@ const Reminders = () => {
                       {format(day, 'd')}
                       {dayReminders.length > 0 && (
                         <div className="flex justify-center mt-1">
-                          <span className={`w-2 h-2 rounded-full ${
+                          <span className={`w-1.5 h-1.5 rounded-full ${
                             isSelected ? 'bg-white' : 'bg-blue-500'
                           }`} />
                         </div>
@@ -334,24 +334,24 @@ const Reminders = () => {
             </div>
           </Card>
           
-          <Card className="p-4">
-            <h3 className="font-semibold mb-3">
+          <Card className="p-3">
+            <h3 className="font-semibold mb-2 text-sm">
               {format(selectedDate, 'MMMM d, yyyy')}
             </h3>
-            <div className="space-y-2 max-h-80 overflow-y-auto">
+            <div className="space-y-2 max-h-64 overflow-y-auto">
               {filteredReminders.length === 0 ? (
-                <p className="text-gray-500 text-sm">No reminders for this date</p>
+                <p className="text-gray-500 text-xs">No reminders for this date</p>
               ) : (
                 filteredReminders.map(reminder => (
                   <div key={reminder.Id} className="p-2 border rounded-md hover:bg-gray-50">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h4 className="font-medium text-sm">{reminder.title}</h4>
+                        <h4 className="font-medium text-xs">{reminder.title}</h4>
                         <p className="text-xs text-gray-600 mt-1">
                           {format(parseISO(reminder.dueDate), 'h:mm a')}
                         </p>
                       </div>
-                      <Badge className={getPriorityColor(reminder.priority)}>
+                      <Badge className={`text-xs ${getPriorityColor(reminder.priority)}`}>
                         {reminder.priority}
                       </Badge>
                     </div>
@@ -364,8 +364,8 @@ const Reminders = () => {
       )}
 
       {/* List View */}
-      {viewMode === 'list' && (
-        <div className="space-y-4">
+{viewMode === 'list' && (
+        <div className="space-y-3">
           {filteredReminders.length === 0 ? (
             <Empty 
               title="No reminders found"
@@ -382,12 +382,12 @@ const Reminders = () => {
               const dateStatus = getDateStatus(reminder.dueDate);
               
               return (
-                <Card key={reminder.Id} className="p-6">
+                <Card key={reminder.Id} className="p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <ApperIcon name={getTypeIcon(reminder.type)} size={20} className="text-gray-600" />
-                        <h3 className="text-lg font-semibold text-gray-900">{reminder.title}</h3>
+                      <div className="flex items-center gap-2 mb-2">
+                        <ApperIcon name={getTypeIcon(reminder.type)} size={18} className="text-gray-600" />
+                        <h3 className="text-base font-semibold text-gray-900">{reminder.title}</h3>
                         <Badge className={getPriorityColor(reminder.priority)}>
                           {reminder.priority}
                         </Badge>
@@ -396,37 +396,37 @@ const Reminders = () => {
                         </Badge>
                       </div>
                       
-                      <p className="text-gray-600 mb-3">{reminder.description}</p>
+                      <p className="text-gray-600 text-sm mb-2">{reminder.description}</p>
                       
-                      <div className="flex flex-wrap gap-4 text-sm">
+                      <div className="flex flex-wrap gap-3 text-sm">
                         <div className="flex items-center gap-1">
-                          <ApperIcon name="Clock" size={16} className={dateStatus.color} />
+                          <ApperIcon name="Clock" size={14} className={dateStatus.color} />
                           <span className={dateStatus.color}>{dateStatus.text}</span>
                           <span className="text-gray-500">at {format(parseISO(reminder.dueDate), 'h:mm a')}</span>
                         </div>
                         
                         {reminder.contactName && (
                           <div className="flex items-center gap-1 text-gray-600">
-                            <ApperIcon name="User" size={16} />
+                            <ApperIcon name="User" size={14} />
                             <span>{reminder.contactName}</span>
                           </div>
                         )}
                         
                         <div className="flex items-center gap-1 text-gray-600">
-                          <ApperIcon name="Tag" size={16} />
+                          <ApperIcon name="Tag" size={14} />
                           <span className="capitalize">{reminder.type}</span>
                         </div>
                       </div>
                     </div>
                     
-                    <div className="flex items-center gap-2 ml-4">
+                    <div className="flex items-center gap-1 ml-3">
                       {reminder.status === 'pending' && (
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => handleComplete(reminder.Id)}
                         >
-                          <ApperIcon name="Check" size={16} />
+                          <ApperIcon name="Check" size={14} />
                           Complete
                         </Button>
                       )}
@@ -436,7 +436,7 @@ const Reminders = () => {
                         size="sm"
                         onClick={() => handleEdit(reminder)}
                       >
-                        <ApperIcon name="Edit" size={16} />
+                        <ApperIcon name="Edit" size={14} />
                         Edit
                       </Button>
                       
@@ -445,7 +445,7 @@ const Reminders = () => {
                         size="sm"
                         onClick={() => handleDelete(reminder.Id)}
                       >
-                        <ApperIcon name="Trash2" size={16} />
+                        <ApperIcon name="Trash2" size={14} />
                         Delete
                       </Button>
                     </div>
@@ -458,9 +458,9 @@ const Reminders = () => {
       )}
 
       {/* Form Modal */}
-      {showForm && (
+{showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <Card className="w-full max-w-md p-6">
+          <Card className="w-full max-w-md p-4">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">
                 {editingReminder ? 'Edit Reminder' : 'Add Reminder'}
@@ -470,7 +470,7 @@ const Reminders = () => {
               </Button>
             </div>
             
-            <form onSubmit={handleSubmit} className="space-y-4">
+<form onSubmit={handleSubmit} className="space-y-3">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Title *
@@ -509,7 +509,7 @@ const Reminders = () => {
                 />
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
+<div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Priority
@@ -517,7 +517,7 @@ const Reminders = () => {
                   <select
                     value={formData.priority}
                     onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -532,7 +532,7 @@ const Reminders = () => {
                   <select
                     value={formData.type}
                     onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   >
                     <option value="task">Task</option>
                     <option value="call">Call</option>

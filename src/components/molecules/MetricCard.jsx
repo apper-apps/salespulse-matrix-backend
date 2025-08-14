@@ -15,7 +15,7 @@ const MetricCard = ({ title, value, change, changeType, icon, gradient }) => {
   };
 
   return (
-    <Card className="p-6 hover:shadow-lg transition-all duration-200 transform hover:scale-[1.02]">
+<Card className="p-4 hover:shadow-lg transition-all duration-200 transform hover:scale-[1.02]">
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <p className="text-sm font-medium text-gray-600 mb-1">{title}</p>

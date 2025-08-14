@@ -139,7 +139,7 @@ title: "Set Reminder",
     return phone;
   };
   return (
-    <div className="space-y-8 animate-fadeIn">
+<div className="space-y-6 animate-fadeIn">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -157,7 +157,7 @@ title: "Set Reminder",
       </div>
 
       {/* Metrics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
           title="Total Revenue"
           value={`$${totalRevenue.toLocaleString()}`}
@@ -192,10 +192,10 @@ title: "Set Reminder",
         />
       </div>
 {/* Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Activities */}
         <div className="lg:col-span-2">
-          <Card className="p-6">
+<Card className="p-4">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold text-gray-900">Recent Activities</h2>
               <Button 
@@ -208,7 +208,7 @@ title: "Set Reminder",
             </div>
             <div className="space-y-4">
               {recentActivities.map((activity) => (
-                <div key={activity.Id} className="flex items-start space-x-4 p-4 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+<div key={activity.Id} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
                   <div className="flex-shrink-0">
                     <div className="w-10 h-10 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center">
                       <ApperIcon 
@@ -240,15 +240,15 @@ title: "Set Reminder",
         </div>
 
         {/* Quick Actions */}
-        <div>
+<div className="lg:col-span-2">
           <Card className="p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">Quick Actions</h2>
-            <div className="space-y-4">
+<div className="space-y-3">
               {quickActions.map((action, index) => (
                 <div
-                  key={index}
+key={index}
                   onClick={action.action}
-                  className="flex items-start space-x-4 p-4 rounded-lg border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all duration-200 cursor-pointer group transform hover:scale-[1.02]"
+                  className="flex items-start space-x-3 p-3 rounded-lg border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all duration-200 cursor-pointer group transform hover:scale-[1.02]"
                 >
                   <div className={`w-10 h-10 ${action.gradient} rounded-lg flex items-center justify-center group-hover:shadow-lg transition-shadow duration-200`}>
                     <ApperIcon name={action.icon} className="w-5 h-5 text-white" />
@@ -265,10 +265,10 @@ title: "Set Reminder",
             </div>
           </Card>
 
-          {/* Summary Stats */}
+{/* Summary Stats */}
           <Card className="p-6 mt-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">Summary</h2>
-            <div className="space-y-4">
+<div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <ApperIcon name="Users" className="w-5 h-5 text-blue-500" />
@@ -314,10 +314,10 @@ title: "Set Reminder",
       </div>
 
       {/* Hot and Cold Leads Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
         {/* Hot Leads */}
         <Card className="p-6">
-          <div className="flex items-center justify-between mb-6">
+<div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
               <ApperIcon name="TrendingUp" className="w-5 h-5 text-red-500" />
               Hot Leads
@@ -325,7 +325,7 @@ title: "Set Reminder",
             <span className="text-sm text-gray-500">{hotLeads.length} contacts</span>
           </div>
 <div className="space-y-3 max-h-96 overflow-y-auto">
-            {hotLeads.slice(0, 8).map((lead) => {
+{hotLeads.slice(0, 6).map((lead) => {
               const [firstName, lastName] = (lead.name || '').split(' ');
               return (
               <div 
@@ -358,7 +358,7 @@ title: "Set Reminder",
 
         {/* Cold Leads */}
         <Card className="p-6">
-          <div className="flex items-center justify-between mb-6">
+<div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
               <ApperIcon name="TrendingDown" className="w-5 h-5 text-blue-500" />
               Cold Leads
@@ -366,7 +366,7 @@ title: "Set Reminder",
             <span className="text-sm text-gray-500">{coldLeads.length} contacts</span>
           </div>
 <div className="space-y-3 max-h-96 overflow-y-auto">
-            {coldLeads.slice(0, 8).map((lead) => {
+{coldLeads.slice(0, 6).map((lead) => {
               const [firstName, lastName] = (lead.name || '').split(' ');
               return (
               <div 
@@ -398,11 +398,11 @@ title: "Set Reminder",
         </Card>
 </div>
 
-      {/* Reminders and Follow-ups Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
-        {/* Reminders */}
-        <Card className="p-6">
-          <div className="flex items-center justify-between mb-6">
+{/* Reminders and Follow-ups Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+        {/* Recent Reminders */}
+        <Card className="p-4">
+          <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
               <ApperIcon name="Bell" className="w-5 h-5 text-orange-500" />
               Upcoming Reminders
@@ -417,7 +417,7 @@ title: "Set Reminder",
           </div>
           <div className="space-y-3 max-h-96 overflow-y-auto">
             {reminders.filter(r => r.status === 'pending').slice(0, 5).map((reminder) => (
-              <div 
+<div
                 key={reminder.Id} 
                 className="flex items-center justify-between p-3 rounded-lg hover:bg-orange-50 transition-colors duration-200 cursor-pointer border border-transparent hover:border-orange-200"
               >
@@ -458,8 +458,8 @@ title: "Set Reminder",
         </Card>
 
         {/* Follow-ups */}
-        <Card className="p-6">
-          <div className="flex items-center justify-between mb-6">
+<Card className="p-4">
+          <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
               <ApperIcon name="Clock" className="w-5 h-5 text-indigo-500" />
               Scheduled Follow-ups
@@ -473,7 +473,7 @@ title: "Set Reminder",
             </div>
           </div>
           <div className="space-y-3 max-h-96 overflow-y-auto">
-            {followUps.filter(f => f.status === 'pending').slice(0, 5).map((followUp) => (
+{followUps.filter(f => f.status === 'pending').slice(0, 4).map((followUp) => (
               <div 
                 key={followUp.Id} 
                 className="flex items-center justify-between p-3 rounded-lg hover:bg-indigo-50 transition-colors duration-200 cursor-pointer border border-transparent hover:border-indigo-200"
@@ -517,16 +517,16 @@ title: "Set Reminder",
       {/* Contact Detail Modal */}
       {showContactModal && selectedContact && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h2 className="text-2xl font-bold text-gray-900">Contact Details</h2>
+<div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <h2 className="text-xl font-bold text-gray-900">Contact Details</h2>
               <Button 
                 variant="ghost" 
                 size="small" 
                 onClick={closeContactModal}
-                className="p-2"
+                className="p-1.5"
               >
-                <ApperIcon name="X" className="w-5 h-5" />
+                <ApperIcon name="X" className="w-4 h-4" />
               </Button>
             </div>
             
@@ -549,14 +549,14 @@ title: "Set Reminder",
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <h4 className="text-lg font-semibold text-gray-900 mb-4">Contact Information</h4>
-                  <div className="space-y-4">
-                    <div className="flex items-center space-x-3">
-                      <ApperIcon name="Mail" className="w-5 h-5 text-gray-400" />
+<div className="space-y-3">
+                    <div className="flex items-center space-x-2">
+                      <ApperIcon name="Mail" className="w-4 h-4 text-gray-400" />
                       <div>
-                        <p className="text-sm text-gray-500">Email</p>
+                        <p className="text-xs text-gray-500">Email</p>
                         <p className="text-sm font-medium text-gray-900">
                           {selectedContact.email || 'Not provided'}
                         </p>
@@ -600,7 +600,7 @@ title: "Set Reminder",
                 </div>
 
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-4">Additional Details</h4>
+<h4 className="text-base font-semibold text-gray-900 mb-3">Additional Details</h4>
                   <div className="space-y-4">
                     {selectedContact.source && (
                       <div>
@@ -630,7 +630,7 @@ title: "Set Reminder",
                 </div>
               </div>
 
-              <div className="flex justify-end space-x-3 mt-8 pt-6 border-t border-gray-200">
+<div className="flex justify-end space-x-2 mt-6 pt-4 border-t border-gray-200">
                 <Button variant="outline" onClick={closeContactModal}>
                   Close
                 </Button>

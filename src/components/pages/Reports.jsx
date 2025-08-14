@@ -180,12 +180,12 @@ const Reports = () => {
   };
 
   return (
-    <div className="space-y-8 animate-fadeIn">
+<div className="space-y-6 animate-fadeIn">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Reports</h1>
-          <p className="text-gray-600 mt-1">Analyze your sales performance and track key metrics</p>
+          <h1 className="text-2xl font-bold text-gray-900">Reports</h1>
+          <p className="text-gray-600 text-sm">Analyze your sales performance and track key metrics</p>
         </div>
         <div className="flex items-center space-x-3">
           <Select
@@ -204,55 +204,55 @@ const Reports = () => {
       </div>
 
       {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="p-6 bg-gradient-to-r from-green-500 to-green-600 text-white">
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="p-4 bg-gradient-to-r from-green-500 to-green-600 text-white">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-green-100 text-sm">Total Revenue</p>
-              <p className="text-2xl font-bold">${totalRevenue.toLocaleString()}</p>
+              <p className="text-green-100 text-xs">Total Revenue</p>
+              <p className="text-xl font-bold">${totalRevenue.toLocaleString()}</p>
             </div>
-            <ApperIcon name="DollarSign" className="w-8 h-8 text-green-200" />
+            <ApperIcon name="DollarSign" className="w-6 h-6 text-green-200" />
           </div>
         </Card>
 
-        <Card className="p-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+        <Card className="p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-blue-100 text-sm">Pipeline Value</p>
-              <p className="text-2xl font-bold">${pipelineValue.toLocaleString()}</p>
+              <p className="text-blue-100 text-xs">Pipeline Value</p>
+              <p className="text-xl font-bold">${pipelineValue.toLocaleString()}</p>
             </div>
-            <ApperIcon name="TrendingUp" className="w-8 h-8 text-blue-200" />
+            <ApperIcon name="TrendingUp" className="w-6 h-6 text-blue-200" />
           </div>
         </Card>
 
-        <Card className="p-6 bg-gradient-to-r from-purple-500 to-purple-600 text-white">
+        <Card className="p-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-purple-100 text-sm">Conversion Rate</p>
-              <p className="text-2xl font-bold">{conversionRate.toFixed(1)}%</p>
+              <p className="text-purple-100 text-xs">Conversion Rate</p>
+              <p className="text-xl font-bold">{conversionRate.toFixed(1)}%</p>
             </div>
-            <ApperIcon name="Target" className="w-8 h-8 text-purple-200" />
+            <ApperIcon name="Target" className="w-6 h-6 text-purple-200" />
           </div>
         </Card>
 
-        <Card className="p-6 bg-gradient-to-r from-pink-500 to-pink-600 text-white">
+        <Card className="p-4 bg-gradient-to-r from-pink-500 to-pink-600 text-white">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-pink-100 text-sm">Avg Deal Size</p>
-              <p className="text-2xl font-bold">${avgDealSize.toLocaleString()}</p>
+              <p className="text-pink-100 text-xs">Avg Deal Size</p>
+              <p className="text-xl font-bold">${avgDealSize.toLocaleString()}</p>
             </div>
-            <ApperIcon name="BarChart3" className="w-8 h-8 text-pink-200" />
+            <ApperIcon name="BarChart3" className="w-6 h-6 text-pink-200" />
           </div>
         </Card>
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Revenue Trend */}
-        <Card className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">Monthly Revenue</h2>
-            <ApperIcon name="TrendingUp" className="w-5 h-5 text-gray-400" />
+        <Card className="p-4">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-gray-900">Monthly Revenue</h2>
+            <ApperIcon name="TrendingUp" className="w-4 h-4 text-gray-400" />
           </div>
           <Chart
             options={revenueChartOptions}
@@ -261,56 +261,56 @@ const Reports = () => {
               data: monthlyRevenue.map(item => item.revenue)
             }]}
             type="area"
-            height={300}
+            height={250}
           />
         </Card>
 
         {/* Pipeline Distribution */}
-        <Card className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">Deal Pipeline</h2>
-            <ApperIcon name="PieChart" className="w-5 h-5 text-gray-400" />
+        <Card className="p-4">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-gray-900">Deal Pipeline</h2>
+            <ApperIcon name="PieChart" className="w-4 h-4 text-gray-400" />
           </div>
           <Chart
             options={pipelineChartOptions}
             series={dealStages.map(stage => stage.count)}
             type="donut"
-            height={300}
+            height={250}
           />
         </Card>
       </div>
 
-      {/* Additional Reports */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Top Performers */}
-        <Card className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">Top Performing Contacts</h2>
-            <ApperIcon name="Award" className="w-5 h-5 text-gray-400" />
+{/* Additional Reports */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Top Performing Contacts */}
+        <Card className="p-4">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-gray-900">Top Performing Contacts</h2>
+            <ApperIcon name="Award" className="w-4 h-4 text-gray-400" />
           </div>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {contactPerformance.map((contact, index) => (
-              <div key={contact.Id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center">
+              <div key={contact.Id} className="flex items-center justify-between p-2.5 bg-gray-50 rounded-lg">
+                <div className="flex items-center space-x-2">
+                  <div className="w-6 h-6 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center">
                     <span className="text-white font-medium text-xs">
                       {index + 1}
                     </span>
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900">
+                    <p className="font-medium text-gray-900 text-sm">
                       {contact.firstName} {contact.lastName}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-xs text-gray-500">
                       {contact.wonDeals} deals won
                     </p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="font-semibold text-gray-900">
+                  <p className="font-semibold text-gray-900 text-sm">
                     ${contact.totalValue.toLocaleString()}
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-xs text-gray-500">
                     {contact.totalDeals} total deals
                   </p>
                 </div>
@@ -320,59 +320,59 @@ const Reports = () => {
         </Card>
 
         {/* Summary Stats */}
-        <Card className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">Summary Statistics</h2>
-            <ApperIcon name="BarChart" className="w-5 h-5 text-gray-400" />
+<Card className="p-4">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-gray-900">Summary Statistics</h2>
+            <ApperIcon name="BarChart" className="w-4 h-4 text-gray-400" />
           </div>
-          <div className="space-y-6">
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <ApperIcon name="Users" className="w-5 h-5 text-blue-500" />
-                <span className="text-gray-700">Total Contacts</span>
+                <ApperIcon name="Users" className="w-4 h-4 text-blue-500" />
+                <span className="text-gray-700 text-sm">Total Contacts</span>
               </div>
-              <span className="font-semibold text-gray-900 text-xl">{contacts.length}</span>
+              <span className="font-semibold text-gray-900 text-lg">{contacts.length}</span>
             </div>
             
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <ApperIcon name="Building2" className="w-5 h-5 text-green-500" />
-                <span className="text-gray-700">Companies</span>
+                <ApperIcon name="Building2" className="w-4 h-4 text-green-500" />
+                <span className="text-gray-700 text-sm">Companies</span>
               </div>
-              <span className="font-semibold text-gray-900 text-xl">{companies.length}</span>
+              <span className="font-semibold text-gray-900 text-lg">{companies.length}</span>
             </div>
             
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <ApperIcon name="Target" className="w-5 h-5 text-purple-500" />
-                <span className="text-gray-700">Active Deals</span>
+                <ApperIcon name="Target" className="w-4 h-4 text-purple-500" />
+                <span className="text-gray-700 text-sm">Active Deals</span>
               </div>
-              <span className="font-semibold text-gray-900 text-xl">
+              <span className="font-semibold text-gray-900 text-lg">
                 {deals.filter(d => !["won", "lost"].includes(d.stage)).length}
               </span>
             </div>
             
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <ApperIcon name="CheckSquare" className="w-5 h-5 text-pink-500" />
-                <span className="text-gray-700">Completed Tasks</span>
+                <ApperIcon name="CheckSquare" className="w-4 h-4 text-pink-500" />
+                <span className="text-gray-700 text-sm">Completed Tasks</span>
               </div>
-              <span className="font-semibold text-gray-900 text-xl">
+              <span className="font-semibold text-gray-900 text-lg">
                 {activities.filter(a => a.status === "completed").length}
               </span>
             </div>
 
-            <div className="pt-4 border-t border-gray-200">
+            <div className="pt-3 border-t border-gray-200">
               <div className="flex items-center justify-between">
-                <span className="text-gray-700 font-medium">Success Rate</span>
+                <span className="text-gray-700 font-medium text-sm">Success Rate</span>
                 <div className="flex items-center space-x-2">
-                  <div className="w-20 h-2 bg-gray-200 rounded-full">
+                  <div className="w-16 h-2 bg-gray-200 rounded-full">
                     <div 
                       className="h-full bg-gradient-to-r from-green-500 to-green-600 rounded-full transition-all duration-500"
                       style={{ width: `${conversionRate}%` }}
                     />
                   </div>
-                  <span className="font-semibold text-gray-900">{conversionRate.toFixed(1)}%</span>
+                  <span className="font-semibold text-gray-900 text-sm">{conversionRate.toFixed(1)}%</span>
                 </div>
               </div>
             </div>

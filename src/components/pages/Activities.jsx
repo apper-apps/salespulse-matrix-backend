@@ -248,12 +248,12 @@ const Activities = () => {
   }
 
   return (
-    <div className="space-y-6 animate-fadeIn">
+<div className="space-y-4 animate-fadeIn">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Activities</h1>
-          <p className="text-gray-600 mt-1">Manage your tasks, calls, meetings, and follow-ups</p>
+          <h1 className="text-2xl font-bold text-gray-900">Activities</h1>
+          <p className="text-gray-600 text-sm">Manage your tasks, calls, meetings, and follow-ups</p>
         </div>
         <Button 
           variant="primary" 
@@ -270,53 +270,53 @@ const Activities = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-        <Card className="p-4">
+<div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+        <Card className="p-3">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Total</p>
-              <p className="text-2xl font-bold text-gray-900">{activities.length}</p>
+              <p className="text-xs text-gray-600">Total</p>
+              <p className="text-xl font-bold text-gray-900">{activities.length}</p>
             </div>
-            <ApperIcon name="CheckSquare" className="w-8 h-8 text-gray-400" />
+            <ApperIcon name="CheckSquare" className="w-6 h-6 text-gray-400" />
           </div>
         </Card>
-        <Card className="p-4">
+        <Card className="p-3">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Pending</p>
-              <p className="text-2xl font-bold text-yellow-600">
+              <p className="text-xs text-gray-600">Pending</p>
+              <p className="text-xl font-bold text-yellow-600">
                 {activities.filter(a => a.status === "pending").length}
               </p>
             </div>
-            <ApperIcon name="Clock" className="w-8 h-8 text-yellow-400" />
+            <ApperIcon name="Clock" className="w-6 h-6 text-yellow-400" />
           </div>
         </Card>
-        <Card className="p-4">
+        <Card className="p-3">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Completed</p>
-              <p className="text-2xl font-bold text-green-600">
+              <p className="text-xs text-gray-600">Completed</p>
+              <p className="text-xl font-bold text-green-600">
                 {activities.filter(a => a.status === "completed").length}
               </p>
             </div>
-            <ApperIcon name="CheckCircle" className="w-8 h-8 text-green-400" />
+            <ApperIcon name="CheckCircle" className="w-6 h-6 text-green-400" />
           </div>
         </Card>
-        <Card className="p-4">
+        <Card className="p-3">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Overdue</p>
-              <p className="text-2xl font-bold text-red-600">
+              <p className="text-xs text-gray-600">Overdue</p>
+              <p className="text-xl font-bold text-red-600">
                 {activities.filter(a => a.status === "overdue").length}
               </p>
             </div>
-            <ApperIcon name="AlertCircle" className="w-8 h-8 text-red-400" />
+            <ApperIcon name="AlertCircle" className="w-6 h-6 text-red-400" />
           </div>
         </Card>
       </div>
 
       {/* Search and Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
+<div className="flex flex-col sm:flex-row gap-3">
         <div className="flex-1">
           <SearchBar
             placeholder="Search activities..."
@@ -375,8 +375,8 @@ const Activities = () => {
             />
             
             <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <form onSubmit={handleSubmit} className="p-6">
-                <div className="flex items-center justify-between mb-6">
+<form onSubmit={handleSubmit} className="p-4">
+                <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-medium text-gray-900">
                     {editingActivity ? "Edit Activity" : "Add New Activity"}
                   </h3>
@@ -389,8 +389,8 @@ const Activities = () => {
                   </button>
                 </div>
 
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+<div className="space-y-3">
+<div className="grid grid-cols-2 gap-3">
                     <Select
                       label="Type"
                       value={formData.type}
@@ -446,7 +446,7 @@ const Activities = () => {
                     required
                   />
                   
-                  <div className="grid grid-cols-2 gap-4">
+<div className="grid grid-cols-2 gap-3">
                     <Select
                       label="Related To"
                       value={formData.relatedToType}
@@ -480,7 +480,7 @@ const Activities = () => {
                   </div>
                 </div>
 
-                <div className="flex justify-end space-x-3 mt-6">
+<div className="flex justify-end space-x-2 mt-4">
                   <Button
                     type="button"
                     variant="secondary"

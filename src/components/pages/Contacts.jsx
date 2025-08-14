@@ -256,12 +256,12 @@ render: (_, contact) => (
   }
 
   return (
-    <div className="space-y-6 animate-fadeIn">
+<div className="space-y-4 animate-fadeIn">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Contacts</h1>
-          <p className="text-gray-600 mt-1">Manage your customer relationships</p>
+          <h1 className="text-2xl font-bold text-gray-900">Contacts</h1>
+          <p className="text-gray-600 text-sm">Manage your customer relationships</p>
         </div>
         <Button 
           variant="primary" 
@@ -291,10 +291,10 @@ onClick={() => {
       </div>
 
       {/* Selection Summary and Bulk Actions */}
-      {selectedContacts.length > 0 && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="flex items-center space-x-4">
+{selectedContacts.length > 0 && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="flex items-center space-x-3">
               <span className="text-sm font-medium text-blue-900">
                 {selectedContacts.length} contact{selectedContacts.length !== 1 ? 's' : ''} selected
               </span>
@@ -323,7 +323,7 @@ onClick={() => {
       )}
 
       {/* Search and Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
+<div className="flex flex-col sm:flex-row gap-3">
         <div className="flex-1">
           <SearchBar
             placeholder="Search contacts..."
@@ -385,18 +385,18 @@ onAction={() => {
 
       {/* Add/Edit Modal */}
 {showAddModal && (
-        <div className="fixed inset-0 z-50 overflow-hidden">
+<div className="fixed inset-0 z-50 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
             <div 
               className="absolute inset-0 bg-black bg-opacity-25 transition-opacity"
               onClick={() => setShowAddModal(false)}
             />
             
-            <div className="fixed inset-y-0 right-0 pl-10 max-w-full flex">
+            <div className="fixed inset-y-0 right-0 pl-8 max-w-full flex">
               <div className="w-screen max-w-md transform transition-transform ease-in-out duration-300 translate-x-0">
                 <div className="h-full flex flex-col bg-white shadow-xl">
-                  <form onSubmit={handleSubmit} className="h-full flex flex-col">
-                    <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+<form onSubmit={handleSubmit} className="h-full flex flex-col">
+                    <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
                       <div className="flex items-center justify-between">
                         <h3 className="text-lg font-medium text-gray-900">
                           {editingContact ? "Edit Contact" : "Add New Contact"}
@@ -411,9 +411,9 @@ onAction={() => {
                       </div>
                     </div>
 
-                    <div className="flex-1 px-6 py-6 overflow-y-auto">
-<div className="space-y-4">
-                        <div className="grid grid-cols-1 gap-4">
+<div className="flex-1 px-4 py-4 overflow-y-auto">
+                      <div className="space-y-3">
+<div className="grid grid-cols-1 gap-3">
                           <Input
                             label="First Name"
                             value={formData.firstName}
@@ -497,8 +497,8 @@ onAction={() => {
                       </div>
                     </div>
 
-                    <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                      <div className="flex justify-end space-x-3">
+<div className="px-4 py-3 bg-gray-50 border-t border-gray-200">
+                      <div className="flex justify-end space-x-2">
                         <Button
                           type="button"
                           variant="secondary"

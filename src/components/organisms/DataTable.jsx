@@ -129,13 +129,13 @@ if (sortConfig.key !== key) return "ArrowUpDown";
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-<div className="overflow-x-auto">
+<div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <div className="overflow-x-auto">
         <table className="w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
               {selectable && (
-                <th className="px-6 py-3 w-12">
+<th className="px-4 py-2 w-12">
                   <input
                     type="checkbox"
                     checked={isAllSelected}
@@ -148,10 +148,10 @@ if (sortConfig.key !== key) return "ArrowUpDown";
                 </th>
               )}
               {columns.map((column) => (
-                <th
+<th
                   key={column.key}
                   className={cn(
-                    "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+                    "px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
                     column.sortable && "cursor-pointer hover:bg-gray-100"
                   )}
                   onClick={() => column.sortable && handleSort(column.key)}
@@ -167,8 +167,8 @@ if (sortConfig.key !== key) return "ArrowUpDown";
                   </div>
                 </th>
               ))}
-              {actions && (
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+{actions && (
+                <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
                 </th>
               )}
@@ -188,7 +188,7 @@ if (sortConfig.key !== key) return "ArrowUpDown";
                   onClick={() => onRowClick && onRowClick(row)}
                 >
                   {selectable && (
-                    <td className="px-6 py-4 whitespace-nowrap w-12">
+<td className="px-4 py-3 whitespace-nowrap w-12">
                       <input
                         type="checkbox"
                         checked={isSelected}
@@ -200,8 +200,8 @@ if (sortConfig.key !== key) return "ArrowUpDown";
                       />
                     </td>
                   )}
-                  {columns.map((column) => (
-                    <td key={column.key} className="px-6 py-4 whitespace-nowrap">
+{columns.map((column) => (
+                    <td key={column.key} className="px-4 py-3 whitespace-nowrap">
                       {column.render ? column.render(row[column.key], row) : (
                         <span className="text-sm text-gray-900">
                           {row[column.key] || "-"}
@@ -209,8 +209,8 @@ if (sortConfig.key !== key) return "ArrowUpDown";
                       )}
                     </td>
                   ))}
-                  {actions && (
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+{actions && (
+                    <td className="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
                       {actions(row)}
                     </td>
                   )}
@@ -223,7 +223,7 @@ if (sortConfig.key !== key) return "ArrowUpDown";
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+<div className="bg-white px-3 py-2 flex items-center justify-between border-t border-gray-200 sm:px-4">
           <div className="flex-1 flex justify-between sm:hidden">
             <Button
               variant="secondary"
