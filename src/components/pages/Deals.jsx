@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
@@ -17,15 +18,16 @@ import { toast } from "react-toastify";
 import { format } from "date-fns";
 
 const Deals = () => {
-  const [deals, setDeals] = useState([]);
+const [deals, setDeals] = useState([]);
   const [contacts, setContacts] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-const [showAddModal, setShowAddModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
   const [editingDeal, setEditingDeal] = useState(null);
-
+  const [dragLoading, setDragLoading] = useState(false);
+  const [recentMoves, setRecentMoves] = useState([]);
   const handleEditRecord = (deal) => {
     setEditingDeal(deal);
     setFormData({
@@ -121,7 +123,7 @@ setShowAddModal(false);
     });
   };
 
-  const handleEdit = (deal) => {
+const handleEdit = (deal) => {
     setEditingDeal(deal);
     setFormData({
       title: deal.title,
@@ -132,7 +134,6 @@ setShowAddModal(false);
       probability: deal.probability?.toString() || "25",
       expectedCloseDate: deal.expectedCloseDate ? format(new Date(deal.expectedCloseDate), "yyyy-MM-dd") : ""
     });
-setEditingDeal(null);
     setShowAddModal(true);
   };
 
@@ -148,7 +149,7 @@ setEditingDeal(null);
     }
   };
 
-  const handleStageChange = async (dealId, newStage) => {
+const handleStageChange = async (dealId, newStage) => {
     try {
       await dealsService.updateStage(dealId, newStage);
       toast.success("Deal stage updated successfully!");
@@ -158,6 +159,117 @@ setEditingDeal(null);
     }
   };
 
+  // Drag and Drop handlers
+  const validateMove = (source, destination) => {
+    // Business rules for stage progression
+    const stageOrder = ['lead', 'qualified', 'proposal', 'negotiation', 'won', 'lost'];
+    const sourceIndex = stageOrder.indexOf(source);
+    const destIndex = stageOrder.indexOf(destination);
+    
+    // Allow moves to adjacent stages or to won/lost from any stage
+    if (destination === 'won' || destination === 'lost') return true;
+    if (Math.abs(destIndex - sourceIndex) <= 1) return true;
+    
+    return false;
+  };
+
+  const onDragEnd = async (result) => {
+    const { destination, source, draggableId } = result;
+    
+    // If no destination, do nothing
+    if (!destination) return;
+    
+    // If dropped in same place, do nothing
+    if (destination.droppableId === source.droppableId && destination.index === source.index) {
+      return;
+    }
+    
+    const dealId = parseInt(draggableId);
+    const newStage = destination.droppableId;
+    const oldStage = source.droppableId;
+    
+    // Validate move
+    if (!validateMove(oldStage, newStage)) {
+      toast.error("Invalid stage transition. Please follow the sales process.");
+      return;
+    }
+    
+    setDragLoading(true);
+    
+    try {
+      // Optimistically update UI
+      const dealToUpdate = deals.find(d => d.Id === dealId);
+      const updatedDeals = deals.map(deal => 
+        deal.Id === dealId ? { ...deal, stage: newStage } : deal
+      );
+      setDeals(updatedDeals);
+      
+      // Save to backend
+      await dealsService.updateStage(dealId, newStage);
+      
+      // Track move for undo functionality
+      const move = {
+        id: Date.now(),
+        dealId,
+        dealTitle: dealToUpdate.title,
+        oldStage,
+        newStage,
+        timestamp: new Date()
+      };
+      setRecentMoves(prev => [move, ...prev.slice(0, 4)]); // Keep last 5 moves
+      
+      // Show success with undo option
+      const toastId = toast.success(
+        <div className="flex items-center justify-between">
+          <span>Deal moved to {dealStages.find(s => s.key === newStage)?.label}</span>
+          <button 
+            onClick={() => handleUndo(move, toastId)}
+            className="ml-3 text-sm underline hover:no-underline"
+          >
+            Undo
+          </button>
+        </div>,
+        { 
+          autoClose: 5000,
+          closeOnClick: false
+        }
+      );
+      
+    } catch (err) {
+      // Revert optimistic update
+      setDeals(deals);
+      toast.error(err.message || "Failed to update deal stage");
+    } finally {
+      setDragLoading(false);
+    }
+  };
+
+  const handleUndo = async (move, toastId) => {
+    try {
+      setDragLoading(true);
+      
+      // Update UI optimistically
+      const updatedDeals = deals.map(deal => 
+        deal.Id === move.dealId ? { ...deal, stage: move.oldStage } : deal
+      );
+      setDeals(updatedDeals);
+      
+      // Update backend
+      await dealsService.updateStage(move.dealId, move.oldStage);
+      
+      // Remove from recent moves
+      setRecentMoves(prev => prev.filter(m => m.id !== move.id));
+      
+      // Dismiss the original toast
+      toast.dismiss(toastId);
+      toast.success(`"${move.dealTitle}" moved back to ${dealStages.find(s => s.key === move.oldStage)?.label}`);
+      
+    } catch (err) {
+      toast.error("Failed to undo move");
+    } finally {
+      setDragLoading(false);
+    }
+  };
   const getContactName = (contactId) => {
     const contact = contacts.find(c => c.Id === contactId);
     return contact ? `${contact.firstName} ${contact.lastName}` : "Unknown Contact";
@@ -188,98 +300,147 @@ setEditingDeal(null);
     return <Error message={error} onRetry={loadDeals} />;
   }
 
-  const KanbanView = () => (
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-      {dealStages.map((stage) => {
-        const stageDeals = getDealsByStage(stage.key);
-        const stageValue = stageDeals.reduce((sum, deal) => sum + deal.value, 0);
-        
-        return (
-<div key={stage.key} className="bg-gray-50 rounded-lg p-3">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-medium text-gray-900">{stage.label}</h3>
-              <div className="text-xs text-gray-500">
-                {stageDeals.length} • ${stageValue.toLocaleString()}
-              </div>
-            </div>
-            
-<div className="space-y-2">
-              {stageDeals.map((deal) => (
-<Card 
-                  key={deal.Id} 
-                  className="p-3 hover:shadow-lg transition-all duration-200 cursor-pointer"
-                  onClick={() => handleEditRecord(deal)}
+const KanbanView = () => (
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+        {dealStages.map((stage) => {
+          const stageDeals = getDealsByStage(stage.key);
+          const stageValue = stageDeals.reduce((sum, deal) => sum + deal.value, 0);
+          
+          return (
+            <Droppable key={stage.key} droppableId={stage.key}>
+              {(provided, snapshot) => (
+                <div 
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className={`bg-gray-50 rounded-lg p-3 transition-all duration-200 ${
+                    snapshot.isDraggingOver 
+                      ? 'bg-primary-50 border-2 border-dashed border-primary-300 shadow-lg' 
+                      : 'border-2 border-transparent'
+                  } ${dragLoading ? 'opacity-75' : ''}`}
                 >
-                  <div className="space-y-2">
-                    <div className="flex items-start justify-between">
-                      <h4 className="font-medium text-sm text-gray-900 line-clamp-2">
-                        {deal.title}
-                      </h4>
-                      <div className="flex space-x-1 ml-2">
-                        <button
-                          onClick={() => handleEdit(deal)}
-                          className="text-gray-400 hover:text-primary-600 p-1"
-                        >
-                          <ApperIcon name="Edit2" className="w-3 h-3" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(deal)}
-                          className="text-gray-400 hover:text-red-600 p-1"
-                        >
-                          <ApperIcon name="Trash2" className="w-3 h-3" />
-                        </button>
-                      </div>
-                    </div>
-                    
-                    <div className="text-lg font-bold text-green-600">
-                      ${deal.value.toLocaleString()}
-                    </div>
-                    
-                    <div className="text-xs text-gray-500 space-y-1">
-                      <div>{getContactName(deal.contactId)}</div>
-                      <div>{getCompanyName(deal.companyId)}</div>
-                      {deal.expectedCloseDate && (
-                        <div>Due: {format(new Date(deal.expectedCloseDate), "MMM dd")}</div>
-                      )}
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="text-xs text-gray-500">
-                        {deal.probability}% probability
-                      </div>
-                      <select
-                        value={deal.stage}
-                        onChange={(e) => handleStageChange(deal.Id, e.target.value)}
-                        className="text-xs bg-transparent border-0 text-gray-600 focus:outline-none"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        {dealStages.map((s) => (
-                          <option key={s.key} value={s.key}>
-                            {s.label}
-                          </option>
-                        ))}
-                      </select>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-medium text-gray-900">{stage.label}</h3>
+                    <div className="text-xs text-gray-500">
+                      {stageDeals.length} • ${stageValue.toLocaleString()}
                     </div>
                   </div>
-                </Card>
-              ))}
-            </div>
-          </div>
-        );
-      })}
-    </div>
+                  
+                  <div className="space-y-2 min-h-[100px]">
+                    {stageDeals.map((deal, index) => (
+                      <Draggable 
+                        key={deal.Id} 
+                        draggableId={deal.Id.toString()} 
+                        index={index}
+                        isDragDisabled={dragLoading}
+                      >
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={{
+                              ...provided.draggableProps.style,
+                              transform: snapshot.isDragging 
+                                ? provided.draggableProps.style?.transform + ' rotate(3deg)'
+                                : provided.draggableProps.style?.transform
+                            }}
+                          >
+                            <Card 
+                              className={`p-3 transition-all duration-200 cursor-grab active:cursor-grabbing ${
+                                snapshot.isDragging 
+                                  ? 'shadow-2xl ring-2 ring-primary-500 ring-opacity-60 bg-white' 
+                                  : 'hover:shadow-lg hover:scale-102'
+                              } ${dragLoading ? 'pointer-events-none' : ''}`}
+                              onClick={(e) => {
+                                if (!snapshot.isDragging) {
+                                  handleEditRecord(deal);
+                                }
+                              }}
+                            >
+                              <div className="space-y-2">
+                                <div className="flex items-start justify-between">
+                                  <h4 className="font-medium text-sm text-gray-900 line-clamp-2">
+                                    {deal.title}
+                                  </h4>
+                                  <div className="flex space-x-1 ml-2">
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleEdit(deal);
+                                      }}
+                                      className="text-gray-400 hover:text-primary-600 p-1 z-10"
+                                      disabled={dragLoading}
+                                    >
+                                      <ApperIcon name="Edit2" className="w-3 h-3" />
+                                    </button>
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleDelete(deal);
+                                      }}
+                                      className="text-gray-400 hover:text-red-600 p-1 z-10"
+                                      disabled={dragLoading}
+                                    >
+                                      <ApperIcon name="Trash2" className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                </div>
+                                
+                                <div className="text-lg font-bold text-green-600">
+                                  ${deal.value.toLocaleString()}
+                                </div>
+                                
+                                <div className="text-xs text-gray-500 space-y-1">
+                                  <div>{getContactName(deal.contactId)}</div>
+                                  <div>{getCompanyName(deal.companyId)}</div>
+                                  {deal.expectedCloseDate && (
+                                    <div>Due: {format(new Date(deal.expectedCloseDate), "MMM dd")}</div>
+                                  )}
+                                </div>
+                                
+                                <div className="flex items-center justify-between">
+                                  <div className="text-xs text-gray-500">
+                                    {deal.probability}% probability
+                                  </div>
+                                  <div className="flex items-center space-x-1">
+                                    <ApperIcon name="GripVertical" className="w-3 h-3 text-gray-400" />
+                                  </div>
+                                </div>
+                              </div>
+                            </Card>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                    {snapshot.isDraggingOver && stageDeals.length === 0 && (
+                      <div className="h-20 border-2 border-dashed border-primary-300 rounded-lg flex items-center justify-center">
+                        <p className="text-primary-600 text-sm font-medium">Drop deal here</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </Droppable>
+          );
+        })}
+      </div>
+    </DragDropContext>
   );
 
   return (
 <div className="space-y-4 animate-fadeIn">
       {/* Header */}
-<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Deals</h1>
-          <p className="text-gray-600 text-sm">Track your sales opportunities and pipeline</p>
+          <p className="text-gray-600 text-sm">
+            Track your sales opportunities and pipeline • Drag & drop to update stages
+          </p>
         </div>
         <div className="flex items-center space-x-3">
-<div className="flex items-center bg-gray-100 rounded-lg p-1">
+          <div className="flex items-center bg-gray-100 rounded-lg p-1">
             <button
               onClick={() => setViewMode("kanban")}
               className={`px-2 py-1 text-sm font-medium rounded-md transition-all duration-200 ${
@@ -309,10 +470,10 @@ setEditingDeal(null);
             onClick={() => {
               setEditingDeal(null);
               resetForm();
-setEditingDeal(null);
               setShowAddModal(true);
             }}
             className="shadow-lg"
+            disabled={dragLoading}
           >
             Add Deal
           </Button>
@@ -320,18 +481,31 @@ setEditingDeal(null);
       </div>
 
       {/* Search */}
-<div className="flex flex-col sm:flex-row gap-3">
+      <div className="flex flex-col sm:flex-row gap-3">
         <div className="flex-1">
           <SearchBar
             placeholder="Search deals..."
             onSearch={setSearchTerm}
             className="w-full"
+            disabled={dragLoading}
           />
         </div>
-        <Button variant="secondary" icon="Filter" className="sm:w-auto">
+        <Button variant="secondary" icon="Filter" className="sm:w-auto" disabled={dragLoading}>
           Filter
         </Button>
       </div>
+
+      {/* Drag Loading Overlay */}
+      {dragLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-4 shadow-xl">
+            <div className="flex items-center space-x-3">
+              <ApperIcon name="Loader2" className="w-5 h-5 animate-spin text-primary-600" />
+              <span className="text-gray-700 font-medium">Updating deal stage...</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Content */}
       {deals.length === 0 ? (

@@ -91,7 +91,46 @@ body {
 .animate-slideIn {
   animation: slideIn 0.3s ease-out;
 }
-
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Drag and Drop Animations */
+@keyframes dragScale {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.02); }
+}
+
+.hover\:scale-102:hover {
+  transform: scale(1.02);
+}
+
+/* Smooth transitions for drag operations */
+.kanban-card {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.kanban-card:hover {
+  transform: translateY(-1px);
+}
+
+/* Drop zone styles */
+.drop-zone-active {
+  background: linear-gradient(135deg, #EEF2FF, #E0E7FF);
+  border-color: #4F46E5;
+}
+
+/* Dragging styles */
+.dragging {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transform: rotate(3deg);
+}
+
+/* Drag handle cursor */
+.drag-handle {
+  cursor: grab;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
 }
