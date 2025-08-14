@@ -20,14 +20,15 @@ const Contacts = () => {
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
+const [searchTerm, setSearchTerm] = useState("");
+  const [leadTypeFilter, setLeadTypeFilter] = useState("all");
 const [showAddModal, setShowAddModal] = useState(false);
   const [editingContact, setEditingContact] = useState(null);
 const [selectedContacts, setSelectedContacts] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
 const handleEditRecord = (contact) => {
     setEditingContact(contact);
-setFormData({
+    setFormData({
       firstName: contact.firstName || '',
       lastName: contact.lastName || '',
       email: contact.email || '',
@@ -161,9 +162,30 @@ const handleEdit = (contact) => {
     handleDelete(selectedContacts);
   };
 
-  const getCompanyName = (companyId) => {
+const getCompanyName = (companyId) => {
     const company = companies.find(c => c.Id === companyId);
     return company ? company.name : "Unknown Company";
+  };
+
+  // Filter contacts based on search term and lead type
+  const filteredContacts = contacts.filter(contact => {
+    // Lead type filter
+    const matchesType = leadTypeFilter === "all" || contact.leadType === leadTypeFilter;
+    
+    // Search term filter
+    const matchesSearch = !searchTerm || 
+      `${contact.firstName} ${contact.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contact.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      getCompanyName(contact.companyId).toLowerCase().includes(searchTerm.toLowerCase());
+    
+    return matchesType && matchesSearch;
+  });
+
+  // Get counts for each lead type
+  const getTypeCount = (type) => {
+    if (type === "all") return contacts.length;
+    return contacts.filter(contact => contact.leadType === type).length;
   };
 
 const columns = [
@@ -246,8 +268,7 @@ render: (_, contact) => (
       )
     }
   ];
-
-  if (loading) {
+if (loading) {
     return <Loading variant="table" message="Loading contacts..." />;
   }
 
@@ -330,46 +351,80 @@ onClick={() => {
             onSearch={setSearchTerm}
             className="w-full"
           />
-        </div>
-        <Button variant="secondary" icon="Filter" className="sm:w-auto">
-          Filter
-        </Button>
+</div>
         <Button variant="secondary" icon="Download" className="sm:w-auto">
           Export
         </Button>
       </div>
 
+{/* Sales Pipeline Filters */}
+      <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center space-x-1">
+            <h3 className="text-sm font-medium text-gray-700 mr-3">Filter by Type:</h3>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { key: "all", label: "All Contacts", count: getTypeCount("all") },
+                { key: "contact", label: "Contacts", count: getTypeCount("contact") },
+                { key: "hot", label: "Hot Leads", count: getTypeCount("hot") },
+                { key: "cold", label: "Cold Leads", count: getTypeCount("cold") }
+              ].map((filter) => (
+                <button
+                  key={filter.key}
+                  onClick={() => setLeadTypeFilter(filter.key)}
+                  className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                    leadTypeFilter === filter.key
+                      ? 'bg-primary-100 text-primary-700 border border-primary-200'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200'
+                  }`}
+                >
+                  {filter.label} ({filter.count})
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="text-sm text-gray-500">
+            Showing {filteredContacts.length} of {contacts.length} contacts
+          </div>
+        </div>
+      </div>
+
       {/* Contacts Table */}
-      {contacts.length === 0 ? (
+      {filteredContacts.length === 0 ? (
         <Empty
-          title="No contacts found"
-          message="Start building your customer base by adding your first contact."
-          actionLabel="Add Contact"
-onAction={() => {
-            setEditingContact(null);
-            setFormData({
-              firstName: "",
-              lastName: "",
-              email: "",
-              linkedinProfile: "",
-              phone: "",
-              companyId: "",
-              position: "",
-              leadType: "contact",
-              score: 50
-            });
-            setEditingContact(null);
-            setSelectedContacts([]);
-            setSelectAll(false);
-            setShowAddModal(true);
+          title={contacts.length === 0 ? "No contacts found" : "No contacts match your filters"}
+          message={contacts.length === 0 ? "Start building your customer base by adding your first contact." : "Try adjusting your search or filter criteria."}
+          actionLabel={contacts.length === 0 ? "Add Contact" : "Clear Filters"}
+          onAction={() => {
+            if (contacts.length === 0) {
+              setEditingContact(null);
+              setFormData({
+                firstName: "",
+                lastName: "",
+                email: "",
+                linkedinProfile: "",
+                phone: "",
+                companyId: "",
+                position: "",
+                leadType: "contact",
+                score: 50
+              });
+              setEditingContact(null);
+              setSelectedContacts([]);
+              setSelectAll(false);
+              setShowAddModal(true);
+            } else {
+              setSearchTerm("");
+              setLeadTypeFilter("all");
+            }
           }}
           icon="Users"
         />
       ) : (
         <DataTable
-          data={contacts}
+          data={filteredContacts}
           columns={columns}
-          searchTerm={searchTerm}
+          searchTerm=""
           selectable={true}
           selectedItems={selectedContacts}
           onSelectItem={handleSelectContact}
